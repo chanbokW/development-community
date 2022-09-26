@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +31,23 @@ public class ArticleService {
         return article.getId();
     }
 
+    @Transactional
     public ArticleResponse findById(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시판을 찾을 수 없습니다"));
 
+        article.addViewCount();
         return ArticleResponse.of(article);
+    }
+
+    //Todo paging 처리
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> findAll() {
+        List<Article> articles = articleRepository.findAll();
+
+        return articles.stream()
+                .map(ArticleResponse::of)
+                .collect(Collectors.toList());
     }
 
     private Member getMember(Long loginMember) {
