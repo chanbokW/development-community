@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
+import me.snsservice.article.dto.ArticleUpdateRequest;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
@@ -22,8 +23,8 @@ public class ArticleService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long createArticle(ArticleRequest articleRequest, Long loginMember) {
-        Member member = getMember(loginMember);
+    public Long createArticle(ArticleRequest articleRequest, Long loginId) {
+        Member member = getMember(loginId);
         Article article = articleRepository.save(articleRequest.toEntity(member));
 
         //Todo 태그 저장 기능추가
@@ -34,7 +35,7 @@ public class ArticleService {
     @Transactional
     public ArticleResponse findById(Long articleId) {
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 게시판을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다"));
 
         article.addViewCount();
         return ArticleResponse.of(article);
@@ -50,8 +51,32 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    private Member getMember(Long loginMember) {
-        return memberRepository.findById(loginMember)
+    @Transactional
+    public void updateArticle(ArticleUpdateRequest request, Long articleId, Long loginId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다"));
+
+        if (!article.getMember().getId().equals(loginId)) {
+            throw new IllegalStateException("해당 개시물에 수정 권한이 없습니다.");
+        }
+
+        article.updateArticle(request.getTitle(),request.getContent());
+    }
+
+    @Transactional
+    public void deleteArticle(Long articleId, Long loginId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다"));
+
+        if (!article.getMember().getId().equals(loginId)) {
+            throw new IllegalStateException("해당 개시물에 수정 권한이 없습니다.");
+        }
+
+        article.deleteArticle();
+    }
+
+    private Member getMember(Long loginId) {
+        return memberRepository.findById(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 회원입니다."));
     }
 

@@ -1,5 +1,6 @@
 package me.snsservice.article.service;
 
+import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.repository.ArticleRepository;
@@ -42,8 +43,10 @@ public class ArticleServiceTest {
         ArticleRequest articleRequest = new ArticleRequest("안녕하세요", "안녕하세요.", List.of("인사", "가입"));
 
         Long articleId = articleService.createArticle(articleRequest, member.getId());
+        Article article = articleRepository.findById(articleId).get();
 
-        assertThat(articleId).isEqualTo(1L);
+        assertThat(articleId).isNotNull();
+        assertThat(articleId).isEqualTo(article.getId());
     }
 
     @Test
@@ -68,5 +71,6 @@ public class ArticleServiceTest {
         assertThat(findArticle.getId()).isEqualTo(articleId);
         assertThat(findArticle.getNickname()).isEqualTo(member.getNickname());
         assertThat(findArticle.getTitle()).isEqualTo(articleRequest.getTitle());
+        assertThat(findArticle.getView()).isEqualTo(1L);
     }
 }

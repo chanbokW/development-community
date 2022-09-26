@@ -41,4 +41,17 @@ public class Article {
     public void addViewCount() {
         this.viewCount += 1;
     }
+
+    public void updateArticle(String title, String content) {
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+    }
+
+    public void deleteArticle() {
+        this.activated = false;
+    }
 }
