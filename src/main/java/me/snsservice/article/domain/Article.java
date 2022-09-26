@@ -30,8 +30,6 @@ public class Article {
 
     private Long viewCount;
 
-
-
     @Builder
     public Article(String title, String content, Member member) {
         this.title = title;
