@@ -34,4 +34,10 @@ public class Tags {
             throw new IllegalArgumentException();
         }
     }
+
+    public List<String> getTagNames() {
+        return tags.stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
+    }
 }
