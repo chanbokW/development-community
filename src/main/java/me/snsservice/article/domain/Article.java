@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.snsservice.member.domain.Member;
+import me.snsservice.tag.domain.Tags;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -22,13 +25,16 @@ public class Article {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     private Boolean activated = true;
 
     private Long viewCount;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<ArticleTag> articleTags = new ArrayList<>();
 
     @Builder
     public Article(String title, String content, Member member) {
@@ -53,5 +59,13 @@ public class Article {
 
     public void deleteArticle() {
         this.activated = false;
+    }
+
+    public void addTags(Tags tags) {
+        tags.getTags()
+                .forEach(tag ->
+                        articleTags.add(new ArticleTag(this, tag)
+                        )
+                );
     }
 }

@@ -2,12 +2,15 @@ package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
-import me.snsservice.article.dto.ArticleRequest;
+import me.snsservice.article.dto.ArticleCreateRequest;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.ArticleUpdateRequest;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
+import me.snsservice.tag.domain.Tag;
+import me.snsservice.tag.domain.Tags;
+import me.snsservice.tag.repository.TagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +24,28 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
+    private final TagRepository tagRepository;
 
     @Transactional
-    public Long createArticle(ArticleRequest articleRequest, Long loginId) {
+    public Long createArticle(ArticleCreateRequest articleCreateRequest, Long loginId) {
         Member member = getMember(loginId);
-        Article article = articleRepository.save(articleRequest.toEntity(member));
 
-        //Todo 태그 저장 기능추가
+        Article article = articleRepository.save(articleCreateRequest.toEntity(member));
+        Tags tags = createTags(Tags.from(articleCreateRequest.getTags()));
+        article.addTags(tags);
 
         return article.getId();
+    }
+
+    private Tags createTags(Tags tags) {
+        return new Tags(tags.getTagNames().stream()
+                .map(this::createTag)
+                .collect(Collectors.toList()));
+    }
+
+    private Tag createTag(String name) {
+        return tagRepository.findByName(name)
+                .orElseGet(() -> tagRepository.save(new Tag(name)));
     }
 
     @Transactional
@@ -60,7 +76,7 @@ public class ArticleService {
             throw new IllegalStateException("해당 개시물에 수정 권한이 없습니다.");
         }
 
-        article.updateArticle(request.getTitle(),request.getContent());
+        article.updateArticle(request.getTitle(), request.getContent());
     }
 
     @Transactional
