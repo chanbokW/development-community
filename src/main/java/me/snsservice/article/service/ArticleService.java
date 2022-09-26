@@ -3,11 +3,14 @@ package me.snsservice.article.service;
 import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleRequest;
+import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,13 @@ public class ArticleService {
         //Todo 태그 저장 기능추가
 
         return article.getId();
+    }
+
+    public ArticleResponse findById(Long articleId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시판을 찾을 수 없습니다"));
+
+        return ArticleResponse.of(article);
     }
 
     private Member getMember(Long loginMember) {
