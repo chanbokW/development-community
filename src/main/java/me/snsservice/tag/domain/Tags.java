@@ -11,7 +11,7 @@ public class Tags {
     private List<Tag> tags;
 
     public Tags(List<Tag> tags) {
-        validateDupulicateTag(tags);
+        validateDuplicateTag(tags);
         this.tags = tags;
     }
 
@@ -24,7 +24,7 @@ public class Tags {
     /**
      * Tag 이름 중복 검사
      */
-    private void validateDupulicateTag(List<Tag> tags) {
+    private void validateDuplicateTag(List<Tag> tags) {
         long count = tags.stream()
                 .map(Tag::getName)
                 .distinct()
