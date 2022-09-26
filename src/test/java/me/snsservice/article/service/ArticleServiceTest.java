@@ -1,6 +1,7 @@
 package me.snsservice.article.service;
 
 import me.snsservice.article.dto.ArticleRequest;
+import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.domain.Role;
@@ -50,8 +51,22 @@ public class ArticleServiceTest {
     void createArticleNotMemberExceptionTest() {
         ArticleRequest articleRequest = new ArticleRequest("안녕하세요", "안녕하세요.", List.of("인사", "가입"));
 
-        assertThatThrownBy(() -> articleService.createArticle(articleRequest,0L))
+        assertThatThrownBy(() -> articleService.createArticle(articleRequest, 0L))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않은 회원입니다.");
+    }
+
+    @Test
+    @DisplayName("게시물 하나를 조회한다")
+    void findArticleOne() {
+        ArticleRequest articleRequest = new ArticleRequest("안녕하세요", "안녕하세요.", List.of("인사", "가입"));
+
+        Long articleId = articleService.createArticle(articleRequest, member.getId());
+
+        ArticleResponse findArticle = articleService.findById(articleId);
+
+        assertThat(findArticle.getId()).isEqualTo(articleId);
+        assertThat(findArticle.getNickname()).isEqualTo(member.getNickname());
+        assertThat(findArticle.getTitle()).isEqualTo(articleRequest.getTitle());
     }
 }
