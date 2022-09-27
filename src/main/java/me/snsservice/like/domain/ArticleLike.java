@@ -26,7 +26,12 @@ public class ArticleLike {
     private Member member;
 
     public ArticleLike(Article article, Member member) {
-        this.article = article;
+        setArticle(article);
         this.member = member;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+        article.getLikes().add(this);
     }
 }

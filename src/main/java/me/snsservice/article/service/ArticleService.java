@@ -73,7 +73,7 @@ public class ArticleService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다"));
 
         if (!article.getMember().getId().equals(loginId)) {
-            throw new IllegalStateException("해당 개시물에 수정 권한이 없습니다.");
+            throw new IllegalStateException("해당 게시물에 수정 권한이 없습니다.");
         }
 
         article.updateArticle(request.getTitle(), request.getContent());
@@ -85,7 +85,7 @@ public class ArticleService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다"));
 
         if (!article.getMember().getId().equals(loginId)) {
-            throw new IllegalStateException("해당 개시물에 수정 권한이 없습니다.");
+            throw new IllegalStateException("해당 게시물에 수정 권한이 없습니다.");
         }
 
         article.deleteArticle();
