@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.snsservice.like.domain.ArticleLike;
 import me.snsservice.member.domain.Member;
 import me.snsservice.tag.domain.Tags;
 
@@ -35,6 +36,9 @@ public class Article {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleTag> articleTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article")
+    private List<ArticleLike> likes = new ArrayList<>();
 
     @Builder
     public Article(String title, String content, Member member) {
