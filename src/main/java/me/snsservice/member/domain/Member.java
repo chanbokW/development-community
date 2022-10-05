@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.snsservice.common.domain.BaseTimeEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -21,6 +22,7 @@ public class Member extends BaseTimeEntity {
 
     private String nickname;
 
+
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -32,5 +34,11 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
         this.password = password;
         this.role = role;
+    }
+
+    // Todo Embeddable 생성해서 관리하기
+    public Member passwordEncord(PasswordEncoder encoder) {
+        this.password = encoder.encode(this.password);
+        return this;
     }
 }

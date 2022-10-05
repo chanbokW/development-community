@@ -52,14 +52,16 @@ public class JwtTokenProvider implements InitializingBean {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliSeconds);
 
-        String accessToken = Jwts.builder()
+        String access = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
 
-        return new TokenDto(new AccessToken(accessToken), new RefreshToken("hello"));
+        // Todo refreshToken 구현하기
+        AccessToken accessToken = new AccessToken(access);
+        return new TokenDto(accessToken, new RefreshToken("hello"));
     }
 
     public Authentication getAuthentication(String token) {

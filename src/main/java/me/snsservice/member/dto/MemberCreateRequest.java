@@ -30,7 +30,7 @@ public class MemberCreateRequest {
                 .email(email)
                 .password(password)
                 .nickname(nickname)
-                .role(Role.MEMBER)
+                .role(Role.ROLE_MEMBER)
                 .build();
     }
 }

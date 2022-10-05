@@ -3,6 +3,7 @@ package me.snsservice.member.service;
 import lombok.RequiredArgsConstructor;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,13 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder encoder;
 
     @Transactional
     public Long createMember(Member newMember) {
         existByEmail(newMember.getEmail());
         existByNickname(newMember.getNickname());
 
-        Member saveMember = memberRepository.save(newMember);
+        Member saveMember = memberRepository.save(newMember.passwordEncord(encoder));
         return saveMember.getId();
     }
 
