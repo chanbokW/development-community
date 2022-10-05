@@ -8,11 +8,10 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
-public class MemberCreateRequest {
+public class CreateMemberRequest {
 
     @Email(message = "이메일 형식에 맞지 않습니다.")
     private String email;
