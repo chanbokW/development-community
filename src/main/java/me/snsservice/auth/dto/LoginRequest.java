@@ -1,13 +1,15 @@
-package me.snsservice.member.dto;
+package me.snsservice.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.validation.constraints.Email;
+
 @Getter
 @AllArgsConstructor
-public class MemberCreateRequest {
+public class LoginRequest {
 
+    @Email
     private String email;
     private String password;
-    private String nickname;
 }
