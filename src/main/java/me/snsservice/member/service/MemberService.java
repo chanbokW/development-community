@@ -1,8 +1,8 @@
 package me.snsservice.member.service;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.member.domain.Member;
-import me.snsservice.member.domain.Role;
 import me.snsservice.member.dto.MemberResponse;
 import me.snsservice.member.dto.UpdateMemberRequest;
 import me.snsservice.member.repository.MemberRepository;
@@ -10,7 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+
+import static me.snsservice.common.error.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,19 +55,19 @@ public class MemberService {
 
     private Member getMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException(email + "존재하지 않은 회원입니다."));
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
 
     }
 
     private void existByEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("이미 존재한 이매일입니다.");
+            throw new BusinessException(EXISTS_EMAIL);
         }
     }
 
     private void existByNickname(String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
-            throw new IllegalArgumentException("이미 존재한 닉네임입니다.");
+            throw new BusinessException(EXISTS_NICKNAME);
         }
     }
 }
