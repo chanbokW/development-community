@@ -20,7 +20,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "internal server error"),
 
     // member
-    NOT_FOUND_MEMBER(404, HttpStatus.NOT_FOUND, "존재하지 않는 회원");
+    NOT_FOUND_MEMBER(404, HttpStatus.NOT_FOUND, "존재하지 않는 회원"),
+    EXISTS_EMAIL(403, HttpStatus.FORBIDDEN, "이미 존재하는 이메일"),
+    EXISTS_NICKNAME(403, HttpStatus.FORBIDDEN, "이미 존재하는 닉네임");
 
     private final int code;
     private final HttpStatus httpStatus;

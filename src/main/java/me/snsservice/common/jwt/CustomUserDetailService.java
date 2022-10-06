@@ -1,6 +1,7 @@
 package me.snsservice.common.jwt;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+
+import static me.snsservice.common.error.ErrorCode.NOT_FOUND_MEMBER;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)
                 .map(this::createUser)
-                .orElseThrow(() -> new UsernameNotFoundException(username + "존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
     }
 
     private User createUser(Member member) {
