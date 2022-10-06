@@ -1,4 +1,4 @@
-package me.snsservice.common.exception.dto;
+package me.snsservice.common.error.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
