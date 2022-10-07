@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
+import me.snsservice.common.error.ErrorCode;
+import me.snsservice.common.error.exception.BusinessException;
 
 @Getter
 public class Tags {
@@ -31,7 +33,7 @@ public class Tags {
                 .count();
 
         if (count != tags.size()) {
-            throw new IllegalArgumentException();
+            throw new BusinessException(ErrorCode.DUPLICATE_TAG);
         }
     }
 
