@@ -22,7 +22,12 @@ public enum ErrorCode {
     // member
     NOT_FOUND_MEMBER(404, HttpStatus.NOT_FOUND, "존재하지 않는 회원"),
     EXISTS_EMAIL(403, HttpStatus.FORBIDDEN, "이미 존재하는 이메일"),
-    EXISTS_NICKNAME(403, HttpStatus.FORBIDDEN, "이미 존재하는 닉네임");
+    EXISTS_NICKNAME(403, HttpStatus.FORBIDDEN, "이미 존재하는 닉네임"),
+
+
+    // article
+    NOT_FOUND_ARTICLE(404, HttpStatus.NOT_FOUND, "존재하지 않은 게시물"),
+    UNAUTHORIZED_ARTICLE_MEMBER(401, HttpStatus.UNAUTHORIZED, "");
 
     private final int code;
     private final HttpStatus httpStatus;

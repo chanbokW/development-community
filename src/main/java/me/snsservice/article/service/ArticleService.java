@@ -2,10 +2,11 @@ package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
-import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
+import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.repository.ArticleRepository;
+import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
@@ -13,9 +14,11 @@ import me.snsservice.tag.repository.TagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static me.snsservice.common.error.ErrorCode.NOT_FOUND_ARTICLE;
+import static me.snsservice.common.error.ErrorCode.UNAUTHORIZED_ARTICLE_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -74,12 +77,12 @@ public class ArticleService {
 
     private Article getArticle(Long articleId) {
         return articleRepository.findById(articleId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다"));
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_ARTICLE));
     }
 
     private void validateArticleMEmberIdAndMemberId(Article article, Long loginId) {
         if (!article.getMember().getId().equals(loginId)) {
-            throw new IllegalStateException("해당 게시물에 수정 권한이 없습니다.");
+            throw new BusinessException(UNAUTHORIZED_ARTICLE_MEMBER);
         }
     }
 }
