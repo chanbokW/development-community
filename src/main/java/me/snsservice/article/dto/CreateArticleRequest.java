@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class ArticleCreateRequest {
+public class CreateArticleRequest {
     private String title;
     private String content;
     private List<String> tags;
