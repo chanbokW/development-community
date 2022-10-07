@@ -25,7 +25,7 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleService.createArticle(createArticleRequest, member));
     }
 
-    @GetMapping("{articleId}")
+    @GetMapping("/{articleId}")
     public ResponseEntity<ArticleResponse> findOneArticle(@PathVariable Long articleId) {
         return ResponseEntity.ok().body(articleService.findById(articleId));
     }
@@ -36,14 +36,14 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleService.findAll());
     }
 
-    @PutMapping("{articleId}")
+    @PutMapping("/{articleId}")
     public ResponseEntity<Void> updateArticle(@PathVariable Long articleId,
               @RequestBody UpdateArticleRequest updateArticleRequest, @LoginMember Member member) {
         articleService.updateArticle(updateArticleRequest, articleId, member.getId());
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("{articleId}")
+    @DeleteMapping("/{articleId}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long articleId, @LoginMember Member member) {
         articleService.deleteArticle(articleId, member.getId());
         return ResponseEntity.ok().build();
