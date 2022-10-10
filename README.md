@@ -14,17 +14,13 @@
 
 [//]: # (<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4e6b25950396e9a3709b56fe4f2b7c8a5ffedde00dd4c40e61d3c9f6488a7a71/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672053656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e675365637572697479266c6f676f436f6c6f723d7768697465"><img src="https://camo.githubusercontent.com/4e6b25950396e9a3709b56fe4f2b7c8a5ffedde00dd4c40e61d3c9f6488a7a71/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672053656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e675365637572697479266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&amp;logo=SpringSecurity&amp;logoColor=white" style="max-width: 100%;"></a>)
 
-### Why JPA?
-- JdbcTemplate, mybatis를 사용했을 때 sql 중복이 발생 및 수정하기 어려움
-- Database 중심적으로 프로그램을 짜게됨
-- 반복적인 crud 작업을 진행
 
 앞으로 진행하면서 적용해볼 계획  
-  - QueryDSL
+  - QueryDSL 적용
 
+진행중인 사항
+- 테스트코드 작성 진행중
 ## 🤔 Contribution
 ### DB 설계 및 Entity 설계 
-- 진행 중
 ### Spring Data JPA
-- 진행 중
-### Session && JWT
+
