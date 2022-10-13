@@ -5,6 +5,7 @@ import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
+import me.snsservice.article.repository.ArticleCustomRepository;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.member.domain.Member;
@@ -27,6 +28,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final TagRepository tagRepository;
 
+
     @Transactional
     public Long createArticle(CreateArticleRequest createArticleRequest, Member member) {
         Article article = articleRepository.save(createArticleRequest.toEntity(member));
@@ -48,7 +50,8 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponse findById(Long articleId) {
-        Article article = getArticle(articleId);
+        Article article = articleRepository.findByIdWithAll(articleId)
+                        .orElseThrow(()-> new BusinessException(NOT_FOUND_ARTICLE));
         article.addViewCount();
         return ArticleResponse.of(article);
     }

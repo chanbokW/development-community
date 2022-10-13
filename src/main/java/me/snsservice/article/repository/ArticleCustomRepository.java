@@ -1,8 +1,9 @@
 package me.snsservice.article.repository;
 
+import me.snsservice.article.domain.Article;
+
 import java.util.Optional;
 
 public interface ArticleCustomRepository {
-    Optional<ArticleQueryDto> findByArticleId(Long articleId);
-    // Todo 전체게시물 response
+    Optional<Article> findByIdWithAll(Long id);
 }
