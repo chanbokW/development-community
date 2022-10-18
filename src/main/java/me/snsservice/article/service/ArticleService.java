@@ -2,16 +2,18 @@ package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
+import me.snsservice.article.dto.ArticleListResponse;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
-import me.snsservice.article.repository.ArticleCustomRepository;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
 import me.snsservice.tag.repository.TagRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,10 +60,15 @@ public class ArticleService {
 
     //Todo paging 처리
     @Transactional(readOnly = true)
-    public List<ArticleResponse> findAll() {
-        return articleRepository.findAll().stream()
-                .map(ArticleResponse::of)
+    public List<ArticleListResponse> findAll() {
+        return articleRepository.findAllArticles().stream()
+                .map(ArticleListResponse::of)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleListResponse> findAllWithArticle(Pageable pageable) {
+        return articleRepository.findAllWithArticle(pageable);
     }
 
     @Transactional
