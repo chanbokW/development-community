@@ -28,4 +28,5 @@ public class ArticleTag {
         this.article = article;
         this.tag = tag;
     }
+
 }

@@ -39,10 +39,7 @@ public class ArticleResponse {
                 .nickname(article.getMember().getNickname())
                 .view(article.getViewCount())
                 .likeCount(article.getLikes().size())
-                .tags(article.getArticleTags().stream()// Todo 도메인에 설계하는게 좋을 거 같기도
-                        .map(articleTag -> articleTag.getTag().getName())
-                        .collect(Collectors.toList())
-                )
+                .tags(article.getTagNames())
                 .build();
     }
 }

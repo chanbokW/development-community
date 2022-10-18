@@ -1,12 +1,15 @@
 package me.snsservice.article.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.article.dto.ArticleListResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.service.ArticleService;
 import me.snsservice.common.jwt.anotation.LoginMember;
 import me.snsservice.member.domain.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +35,8 @@ public class ArticleController {
 
     // Todo 페이징
     @GetMapping
-    public ResponseEntity<List<ArticleResponse>> findAllArticle() {
-        return ResponseEntity.ok().body(articleService.findAll());
+    public ResponseEntity<Page<ArticleListResponse>> findAllArticle(Pageable pageable) {
+        return ResponseEntity.ok().body(articleService.findAllWithArticle(pageable));
     }
 
     @PutMapping("/{articleId}")

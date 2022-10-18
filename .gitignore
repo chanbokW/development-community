@@ -45,3 +45,6 @@ out/
 *.iml
 out
 gen
+
+### Querydsl
+/src/main/generated

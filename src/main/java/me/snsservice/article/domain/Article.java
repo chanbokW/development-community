@@ -11,6 +11,7 @@ import me.snsservice.tag.domain.Tags;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -71,5 +72,11 @@ public class Article {
                         articleTags.add(new ArticleTag(this, tag)
                         )
                 );
+    }
+
+    public List<String> getTagNames() {
+        return getArticleTags().stream()
+                .map(articleTag ->  articleTag.getTag().getName())
+                .collect(Collectors.toList());
     }
 }

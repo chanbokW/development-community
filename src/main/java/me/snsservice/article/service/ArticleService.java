@@ -2,6 +2,7 @@ package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
+import me.snsservice.article.dto.ArticleListResponse;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
@@ -11,6 +12,8 @@ import me.snsservice.member.domain.Member;
 import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
 import me.snsservice.tag.repository.TagRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final TagRepository tagRepository;
+
 
     @Transactional
     public Long createArticle(CreateArticleRequest createArticleRequest, Member member) {
@@ -48,17 +52,23 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponse findById(Long articleId) {
-        Article article = getArticle(articleId);
+        Article article = articleRepository.findByIdWithAll(articleId)
+                        .orElseThrow(()-> new BusinessException(NOT_FOUND_ARTICLE));
         article.addViewCount();
         return ArticleResponse.of(article);
     }
 
     //Todo paging 처리
     @Transactional(readOnly = true)
-    public List<ArticleResponse> findAll() {
-        return articleRepository.findAll().stream()
-                .map(ArticleResponse::of)
+    public List<ArticleListResponse> findAll() {
+        return articleRepository.findAllArticles().stream()
+                .map(ArticleListResponse::of)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleListResponse> findAllWithArticle(Pageable pageable) {
+        return articleRepository.findAllWithArticle(pageable);
     }
 
     @Transactional
