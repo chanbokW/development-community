@@ -15,12 +15,86 @@
 [//]: # (<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4e6b25950396e9a3709b56fe4f2b7c8a5ffedde00dd4c40e61d3c9f6488a7a71/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672053656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e675365637572697479266c6f676f436f6c6f723d7768697465"><img src="https://camo.githubusercontent.com/4e6b25950396e9a3709b56fe4f2b7c8a5ffedde00dd4c40e61d3c9f6488a7a71/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672053656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e675365637572697479266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&amp;logo=SpringSecurity&amp;logoColor=white" style="max-width: 100%;"></a>)
 
 
-앞으로 진행하면서 적용해볼 계획  
-  - QueryDSL 적용
+## 🤔 Contribution
+
+## Spring Boot(API SERVER)
+    API SERVER 개발
+패키지 구조는 도메인 단위로 디렉토리를 다음과 같이 구성하였습니다.
+- 도메인(게시물)
+  - controller
+    - API 관리한다.
+  - service
+    - 비즈니스 로직을 관리한다.
+  - repository
+    - JPA + QueryDSL 관리한다.
+  - dto
+    - request + response dto 관리한다.
+  - 도메인(엔티티)
+    - 도메인의 Entity를 관리한다.
+
+- common
+  - 공통 작업들이 들어가는 클래스와 유틸리티 기능을 관리한다.
+- config
+  - 프로젝트의 Configuration 관리한다.
+
+## Spring Security
+    Security 설정을 추가해 인가된 사용자만 특정 API를 접근 할 수 있도록 제한한다
+구조는 다음과 같이 구성하였습니다.
+- Session Creation Policy : STATELESS
+- CSRF : disable
+- FormLogin : disable
+- httpBasic : disable
+- AuthenticationEntryPoint : JwtAuthenticationEntryPoint.class
+- AccessDeniedHandler : JwtAccessDeniedHandler.class
+
+## JPA / QueryDSL
+    객체 중심 도메인 설계 및 반복적인 CRUD작업을 대체 및 비즈니스로직 집중한다.
+- JPA : 반복적인 CRUD 작업을 대체해 간단히 DataBase 데이터를 조회한다.
+- QueryDSL : Join 등 JPA에서 발생한 N + 1 문제 등 SQL은 QueryDSL로 작성한다.
+  - ArticleRepository(JPA Interface)
+  - ArticleCustomRepository(QueryDSL Interface)
+  - ArticleCustomRepository(QueryDSL Implements Class)
+
+- QueryDSL로 작성한 SQL문은 JunitTest 후 작성하였습니다.
+```java
+@DataJpaTest
+public class ArticleRepositoryTest {
+    ...
+}
+```
+
+## JUnit
+    레이어 별로 테스트를 진행하였고 로직에 집중해 테스트를 수행한다.
+- domain Test
+  - 비즈니스 로직에서 중요한 부분이기 때문에 테스트코드를 작성하였습니다.
+    ```java
+    public class TagsTest {
+        ...
+    }
+    ```
+- Service Test
+  - 스프링부트 테스트로 작성하였습니다. 
+    ```java
+      @SpringBootTest
+      @Transactional
+      public class ArticleServiceTest {
+            ...  
+      }
+    ```
+- Repository Test
+  - 주로 커스텀하게 작성한 쿼리 메소드나 QueryDSL로 작성한 SQL을 테스트 및 실제 쿼리가 어떻게 출력되는 지 확인하였습니다.
+  ```java
+    @DataJpaTest
+    public class ArticleRepositoryTest {
+    ...
+    }
+    ```
+- controller
+  - 진행 중
+
+## DB 설계 및 Entity 설계 
+![스크린샷](https://user-images.githubusercontent.com/82792464/198165515-f8651588-fb2d-499f-a632-dca6908ee4d7.png)
 
 진행중인 사항
 - 테스트코드 작성 진행중
-## 🤔 Contribution
-### DB 설계 및 Entity 설계 
-### Spring Data JPA
 
