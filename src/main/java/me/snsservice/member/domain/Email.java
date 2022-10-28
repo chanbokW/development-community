@@ -21,7 +21,7 @@ public class Email {
     private String email;
 
     public Email(String email) {
-        validate(email);
+        validateEmailPattern(email);
         this.email = email;
     }
 
@@ -29,10 +29,14 @@ public class Email {
         return email;
     }
 
-    private void validate(String email) {
-        if (email == null || !PATTERN.matcher(email).matches()) {
+    private void validateEmailPattern(String email) {
+        if (isNotValid(email)) {
             throw new BusinessException(ErrorCode.INVALID_MEMBER_EMAIL);
         }
+    }
+
+    private boolean isNotValid(String email) {
+        return !PATTERN.matcher(email).matches();
     }
 
     @Override

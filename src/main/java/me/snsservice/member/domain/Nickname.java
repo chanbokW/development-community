@@ -23,19 +23,19 @@ public class Nickname {
     private String nickname;
 
     public Nickname(String nickname) {
-        validate(nickname);
+        validateNicknamePattern(nickname);
         this.nickname = nickname;
     }
 
-    private void validate(String nickname) {
-        if (Objects.isNull(nickname)) {
-           throw new BusinessException(ErrorCode.NOT_INPUT_MEMBER_NICKNAME);
-        }
-
+    private void validateNicknamePattern(String nickname) {
         if(nickname.length() < MIN_LENGTH || nickname.length() > MAX_LENGTH
-            || !PATTERN.matcher(nickname).matches()) {
+            || isNotValide(nickname)) {
             throw new BusinessException(ErrorCode.INVALID_MEMBER_NICKNAME);
         }
+    }
+
+    private boolean isNotValide(String nickname) {
+        return !PATTERN.matcher(nickname).matches();
     }
 
     public String value() {

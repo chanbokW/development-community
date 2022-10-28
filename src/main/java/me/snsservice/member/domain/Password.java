@@ -21,8 +21,8 @@ public class Password {
     @Column(name = "password")
     private String password;
 
-    public static Password from(String password, PasswordEncoder encoder) {
-        validate(password);
+    public static Password encrypt(String password, PasswordEncoder encoder) {
+        validatePasswordPattern(password);
         return new Password(encoder.encode(password));
     }
 
@@ -30,14 +30,14 @@ public class Password {
         this.password = password;
     }
 
-    private static void validate(String password) {
-        if (Objects.isNull(password)) {
-            throw new BusinessException(ErrorCode.NOT_INPUT_MEMBER_PASSWORD);
-        }
-
-        if(!PATTERN.matcher(password).matches()) {
+    private static void validatePasswordPattern(String password) {
+        if(isNotValid(password)) {
             throw new BusinessException(ErrorCode.INVALID_MEMBER_PASSWORD);
         }
+    }
+
+    private static boolean isNotValid(String password) {
+        return !PATTERN.matcher(password).matches();
     }
 
     public String value() {
