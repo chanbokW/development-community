@@ -1,10 +1,10 @@
 package me.snsservice.member.domain;
 
 import me.snsservice.common.error.ErrorCode;
+import me.snsservice.common.error.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,19 +20,12 @@ public class EmailTest {
         assertThat(email.value()).isEqualTo(value);
     }
 
-    @DisplayName("이메일이 null일 경우 예외가 발생한다.")
-    @ParameterizedTest
-    @NullSource
-    void emailExceptionNullTest(String nullValue) {
-        assertThatThrownBy(() -> new Email(nullValue))
-                .hasMessage(ErrorCode.INVALID_MEMBER_EMAIL.getMessage());
-    }
-
     @DisplayName("올바르지 않은 형식의 이메일일 경우 예외가 발생한다")
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "korea.com", "id.korea.com", "id@korea..com", "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com"})
     void emailExceptionFormatTest(String value) {
         assertThatThrownBy(() -> new Email(value))
+                .isInstanceOf(BusinessException.class)
                 .hasMessage(ErrorCode.INVALID_MEMBER_EMAIL.getMessage());
     }
 
