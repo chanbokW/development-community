@@ -23,6 +23,14 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(404, HttpStatus.NOT_FOUND, "존재하지 않는 회원"),
     EXISTS_EMAIL(403, HttpStatus.FORBIDDEN, "이미 존재하는 이메일"),
     EXISTS_NICKNAME(403, HttpStatus.FORBIDDEN, "이미 존재하는 닉네임"),
+    INVALID_MEMBER_NICKNAME(400, HttpStatus.BAD_REQUEST, "잘못된 닉네임 형식"),
+    INVALID_MEMBER_PASSWORD(400, HttpStatus.BAD_REQUEST, "잘못된 비밀번호 형식"),
+    INVALID_MEMBER_EMAIL(400, HttpStatus.BAD_REQUEST, "잘못된 이메일 형식"),
+    NOT_INPUT_MEMBER_PASSWORD(400, HttpStatus.BAD_REQUEST, "입력하지 않은 패스워드"),
+    NOT_INPUT_MEMBER_EMAIL(400, HttpStatus.BAD_REQUEST, "입력하지 않은 이메일"),
+    NOT_INPUT_MEMBER_NICKNAME(400, HttpStatus.BAD_REQUEST, "입력하지 않은 닉네임"),
+
+
 
 
     // article
