@@ -31,16 +31,16 @@ public enum ErrorCode {
     NOT_INPUT_MEMBER_NICKNAME(400, HttpStatus.BAD_REQUEST, "입력하지 않은 닉네임"),
 
 
-
-
     // article
     NOT_FOUND_ARTICLE(404, HttpStatus.NOT_FOUND, "존재하지 않은 게시물"),
     UNAUTHORIZED_ARTICLE_MEMBER(401, HttpStatus.UNAUTHORIZED, ""),
+    INVALID_ARTICLE_TITLE(400, HttpStatus.BAD_REQUEST, "제목은 2자이상 50자이하 문자를 입력하세요."),
+    INVALID_ARTICLE_CONTENT(400, HttpStatus.BAD_REQUEST, "본문은 2자이상 500자이하 문자를 입력하세요."),
 
     // tag
-    DUPLICATE_TAG(400, HttpStatus.BAD_REQUEST, "중복되는 태그 입력");
+    DUPLICATE_TAG(400,HttpStatus.BAD_REQUEST, "중복되는 태그 입력");
 
     private final int code;
     private final HttpStatus httpStatus;
     private final String message;
-}
+    }
