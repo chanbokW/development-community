@@ -1,8 +1,7 @@
-package me.snsservice.common.error.response;
+package me.snsservice.common.error;
 
 import lombok.*;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
 import java.util.List;
 import java.util.stream.Collectors;

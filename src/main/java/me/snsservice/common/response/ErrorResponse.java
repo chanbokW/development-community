@@ -1,12 +1,13 @@
-package me.snsservice.common.error;
+package me.snsservice.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.snsservice.common.error.ErrorCode;
+import me.snsservice.common.error.FieldErrors;
 import me.snsservice.common.error.exception.BusinessException;
-import me.snsservice.common.error.response.FieldErrors;
 import org.springframework.validation.BindingResult;
 
 @Getter
