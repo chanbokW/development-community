@@ -24,7 +24,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<Long> createMember(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(memberService.createMember(createMemberRequest.toEntity()));
+                .body(memberService.createMember(createMemberRequest));
     }
 
     @GetMapping("/me")
