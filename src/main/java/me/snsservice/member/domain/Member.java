@@ -18,37 +18,52 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    @Embedded
+    private Email email;
 
-    private String nickname;
+    @Embedded
+    private Nickname nickname;
 
-
-    private String password;
+    @Embedded
+    private Password password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
-    public Member(String email, String nickname, String password, Role role) {
-        this.email = email;
-        this.nickname = nickname;
-        this.password = password;
+    public Member(String email, String nickname, String password,Role role) {
+        this.email = new Email(email);
+        this.nickname = new Nickname(nickname);
+        this.password = Password.from(password);
         this.role = role;
     }
 
     // Todo Embeddable 생성해서 관리하기
-    public Member passwordEncord(PasswordEncoder encoder) {
-        this.password = encoder.encode(this.password);
+    public Member passwordEncode(PasswordEncoder encoder) {
+        this.password = Password.encrypt(this.password.value(), encoder);
         return this;
     }
 
     public void update(Member updateMember, PasswordEncoder encoder) {
         if (updateMember.getNickname() != null) {
-            this.nickname = updateMember.getNickname();
+            this.nickname = new Nickname(updateMember.getNickname());
         }
 
         if (updateMember.getPassword() != null) {
-            this.password = encoder.encode(updateMember.getPassword());
+            this.password = Password.encrypt(updateMember.getPassword(), encoder);
         }
     }
+
+    public String getEmail() {
+        return email.value();
+    }
+
+    public String getPassword() {
+        return password.value();
+    }
+
+    public String getNickname() {
+        return nickname.value();
+    }
+
 }

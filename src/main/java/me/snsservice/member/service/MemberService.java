@@ -2,7 +2,10 @@ package me.snsservice.member.service;
 
 import lombok.RequiredArgsConstructor;
 import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.member.domain.Email;
 import me.snsservice.member.domain.Member;
+import me.snsservice.member.domain.Nickname;
+import me.snsservice.member.dto.CreateMemberRequest;
 import me.snsservice.member.dto.MemberResponse;
 import me.snsservice.member.dto.UpdateMemberRequest;
 import me.snsservice.member.repository.MemberRepository;
@@ -21,11 +24,12 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
     @Transactional
-    public Long createMember(Member newMember) {
-        existByEmail(newMember.getEmail());
-        existByNickname(newMember.getNickname());
+    public Long createMember(CreateMemberRequest createMemberRequest) {
+        existByEmail(createMemberRequest.getEmail());
+        existByNickname(createMemberRequest.getNickname());
 
-        Member saveMember = memberRepository.save(newMember.passwordEncord(encoder));
+        Member saveMember = memberRepository
+                .save(createMemberRequest.toEntity().passwordEncode( encoder));
         return saveMember.getId();
     }
 
@@ -54,19 +58,19 @@ public class MemberService {
     }
 
     private Member getMemberByEmail(String email) {
-        return memberRepository.findByEmail(email)
+        return memberRepository.findByEmail(new Email(email))
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
 
     }
 
     private void existByEmail(String email) {
-        if (memberRepository.existsByEmail(email)) {
+        if (memberRepository.existsByEmail(new Email(email))) {
             throw new BusinessException(EXISTS_EMAIL);
         }
     }
 
     private void existByNickname(String nickname) {
-        if (memberRepository.existsByNickname(nickname)) {
+        if (memberRepository.existsByNickname(new Nickname(nickname))) {
             throw new BusinessException(EXISTS_NICKNAME);
         }
     }

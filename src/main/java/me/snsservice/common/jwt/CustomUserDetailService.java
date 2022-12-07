@@ -2,6 +2,7 @@ package me.snsservice.common.jwt;
 
 import lombok.RequiredArgsConstructor;
 import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.member.domain.Email;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findByEmail(username)
+        return memberRepository.findByEmail(new Email(username))
                 .map(this::createUser)
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
     }

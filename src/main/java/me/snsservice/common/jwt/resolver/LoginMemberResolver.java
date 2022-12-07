@@ -7,6 +7,7 @@ import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.common.jwt.JwtTokenProvider;
 import me.snsservice.common.jwt.anotation.LoginMember;
 import me.snsservice.config.security.JwtFilter;
+import me.snsservice.member.domain.Email;
 import me.snsservice.member.repository.MemberRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class LoginMemberResolver implements HandlerMethodArgumentResolver {
                 .map(authorization -> authorization.split("Bearer")[1])
                 .map(jwtTokenProvider::getAuthentication)
                 .map(authentication -> authentication.getName())
-                .map(email -> memberRepository.findByEmail(email)
+                .map(email -> memberRepository.findByEmail(new Email(email))
                         .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER)))
                 .orElseThrow(() -> new BusinessException(ErrorCode.BAD_REQUEST));
     }
