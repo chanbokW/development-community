@@ -26,6 +26,10 @@ public class Password {
         return new Password(encoder.encode(password));
     }
 
+    public static Password from(String password) {
+        return new Password(password);
+    }
+
     private Password(String password) {
         this.password = password;
     }

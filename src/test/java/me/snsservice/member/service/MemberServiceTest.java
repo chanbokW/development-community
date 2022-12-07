@@ -27,7 +27,7 @@ public class MemberServiceTest {
     @DisplayName("회원가입을 한다 - 정상흐름")
     void createMemberTest() {
         //        return new CreateMemberRequest("test1234@naver.com", "test1234", "hello");
-        CreateMemberRequest request = createMemberRequest("test1234@naver.com","test1234", "hello");
+        CreateMemberRequest request = createMemberRequest("test1234@naver.com","test1234@", "hello");
 
         Long saveId = memberService.createMember(request);
 
@@ -37,17 +37,17 @@ public class MemberServiceTest {
     @Test
     @DisplayName("중복된 이메일로 회원가입시도시 예외가 발생한다")
     void emailValidationExceptionTest() {
-        Member member = getMember("hello@gmail.com", "pwpw001", "hello");
+        Member member = getMember("hello@gmail.com", "pwpw001!", "hello");
         memberRepository.save(member);
 
-        CreateMemberRequest memberRequest = createMemberRequest("hello@gmail.com", "pwpw001", "hello");
+        CreateMemberRequest memberRequest = createMemberRequest("hello@gmail.com", "pwpw001!", "hello");
         assertThrows(BusinessException.class, () -> memberService.createMember(memberRequest));
     }
 
     @Test
     @DisplayName("중복된 닉네임으로 회원가입시도시 예외가 발생한다")
     void nicknameValidationExceptionTest() {
-        Member member = getMember("hello1234@gmail.com", "pwpw001", "hello");
+        Member member = getMember("hello1234@gmail.com", "pwpw0011@", "hello");
         memberRepository.save(member);
 //
 //        Member member2 = Member.builder()
@@ -55,13 +55,13 @@ public class MemberServiceTest {
 //                .password("pw001")
 //                .nickname("spring")
 //                .build();
-        CreateMemberRequest memberRequest = createMemberRequest("hello12345@gmail.com", "pwpw001", "hello");
+        CreateMemberRequest memberRequest = createMemberRequest("hello12345@gmail.com", "pwpw0011@", "hello");
         assertThrows(BusinessException.class, () -> memberService.createMember(memberRequest));
     }
     private Member getMember() {
         return Member.builder()
                 .email("hello@gmail.com")
-                .password("pw001")
+                .password("pwpw001!")
                 .nickname("spring")
                 .build();
     }
