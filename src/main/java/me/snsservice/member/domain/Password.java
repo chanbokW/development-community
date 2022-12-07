@@ -27,6 +27,7 @@ public class Password {
     }
 
     public static Password from(String password) {
+        validatePasswordPattern(password);
         return new Password(password);
     }
 

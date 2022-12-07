@@ -63,7 +63,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public String getNickname() {
-        return password.value();
+        return nickname.value();
     }
 
 }
