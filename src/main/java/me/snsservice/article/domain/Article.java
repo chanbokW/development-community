@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.snsservice.common.domain.BaseTimeEntity;
 import me.snsservice.like.domain.ArticleLike;
 import me.snsservice.member.domain.Member;
 import me.snsservice.tag.domain.Tags;
@@ -16,16 +17,16 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article {
+public class Article extends BaseTimeEntity {
 
     // Todo 추후에 칼럼이 추가 될 수 있습니다.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private Title title;
 
-    private String content;
+    private Content content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -43,8 +44,8 @@ public class Article {
 
     @Builder
     public Article(String title, String content, Member member) {
-        this.title = title;
-        this.content = content;
+        this.title = new Title(title);
+        this.content = new Content(content);
         this.member = member;
         this.viewCount = 0L;
     }
@@ -55,10 +56,10 @@ public class Article {
 
     public void updateArticle(String title, String content) {
         if (title != null) {
-            this.title = title;
+            this.title = new Title(title);
         }
         if (content != null) {
-            this.content = content;
+            this.content = new Content(content);
         }
     }
 
@@ -78,5 +79,13 @@ public class Article {
         return getArticleTags().stream()
                 .map(articleTag ->  articleTag.getTag().getName())
                 .collect(Collectors.toList());
+    }
+
+    public String getTitle() {
+        return title.value();
+    }
+
+    public String getContent() {
+        return content.value();
     }
 }
