@@ -37,7 +37,7 @@ public class ArticleServiceTest {
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("korea123@gmail.com", "hello", "pw0011", Role.ROLE_MEMBER));
+        member = memberRepository.save(new Member("korea123@gmail.com", "hello", "pw00111!1", Role.ROLE_MEMBER));
     }
 
     @Test
