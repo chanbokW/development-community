@@ -2,12 +2,14 @@ package me.snsservice.article.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.snsservice.article.domain.Article;
 import me.snsservice.member.domain.Member;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class CreateArticleRequest {
     private String title;
