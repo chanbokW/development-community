@@ -43,11 +43,11 @@ public class MemberService {
     public MemberResponse updateMember(String email, UpdateMemberRequest updateMemberRequest) {
         Member findMember = getMemberByEmail(email);
         String nickname = updateMemberRequest.getNickname();
+        String password = updateMemberRequest.getPassword();
         if (!findMember.getNickname().equals(nickname)) {
             existByNickname(nickname);
         }
-        findMember.update(updateMemberRequest.toEntity(), encoder);
-
+        findMember.update(nickname, password, encoder);
         return MemberResponse.of(findMember);
     }
 

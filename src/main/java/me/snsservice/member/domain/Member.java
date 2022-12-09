@@ -31,7 +31,7 @@ public class Member extends BaseTimeEntity {
     private Role role;
 
     @Builder
-    public Member(String email, String nickname, String password,Role role) {
+    public Member(String email, String nickname, String password, Role role) {
         this.email = new Email(email);
         this.nickname = new Nickname(nickname);
         this.password = Password.from(password);
@@ -44,13 +44,13 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
-    public void update(Member updateMember, PasswordEncoder encoder) {
-        if (updateMember.getNickname() != null) {
-            this.nickname = new Nickname(updateMember.getNickname());
+    public void update(String nickname, String password, PasswordEncoder encoder) {
+        if (nickname != null) {
+            this.nickname = new Nickname(nickname);
         }
 
-        if (updateMember.getPassword() != null) {
-            this.password = Password.encrypt(updateMember.getPassword(), encoder);
+        if (password != null) {
+            this.password = Password.encrypt(password, encoder);
         }
     }
 

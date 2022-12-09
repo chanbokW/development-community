@@ -44,7 +44,7 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
         List<ArticleListResponse> fetch = query.select(constructor(
                                 ArticleListResponse.class,
                                 article,
-                                member.nickname
+                                member.nickname.nickname
                         )
                 )
                 .from(article, article)
