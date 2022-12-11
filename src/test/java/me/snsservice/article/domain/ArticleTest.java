@@ -1,7 +1,7 @@
 package me.snsservice.article.domain;
 
-import me.snsservice.common.error.ErrorCode;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.ErrorCode;
+import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

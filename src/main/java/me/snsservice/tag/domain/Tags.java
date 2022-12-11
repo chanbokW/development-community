@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
-import me.snsservice.common.error.ErrorCode;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.ErrorCode;
+import me.snsservice.common.exception.BusinessException;
 
 @Getter
 public class Tags {

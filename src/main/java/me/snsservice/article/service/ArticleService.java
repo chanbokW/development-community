@@ -7,7 +7,7 @@ import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.repository.ArticleRepository;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.snsservice.common.error.ErrorCode.NOT_FOUND_ARTICLE;
-import static me.snsservice.common.error.ErrorCode.UNAUTHORIZED_ARTICLE_MEMBER;
+import static me.snsservice.common.exception.ErrorCode.NOT_FOUND_ARTICLE;
+import static me.snsservice.common.exception.ErrorCode.UNAUTHORIZED_ARTICLE_MEMBER;
 
 @Service
 @RequiredArgsConstructor

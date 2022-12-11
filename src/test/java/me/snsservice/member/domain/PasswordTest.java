@@ -1,10 +1,9 @@
 package me.snsservice.member.domain;
 
-import me.snsservice.common.error.ErrorCode;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.ErrorCode;
+import me.snsservice.common.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;

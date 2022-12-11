@@ -2,8 +2,8 @@ package me.snsservice.member.domain;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import me.snsservice.common.error.ErrorCode;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.ErrorCode;
+import me.snsservice.common.exception.BusinessException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

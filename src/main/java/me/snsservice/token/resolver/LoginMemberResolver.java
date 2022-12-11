@@ -1,11 +1,11 @@
-package me.snsservice.common.jwt.resolver;
+package me.snsservice.token.resolver;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.snsservice.common.error.ErrorCode;
-import me.snsservice.common.error.exception.BusinessException;
-import me.snsservice.common.jwt.JwtTokenProvider;
-import me.snsservice.common.jwt.anotation.LoginMember;
+import me.snsservice.common.exception.ErrorCode;
+import me.snsservice.common.exception.BusinessException;
+import me.snsservice.token.JwtTokenProvider;
+import me.snsservice.token.annotation.LoginMember;
 import me.snsservice.config.security.JwtFilter;
 import me.snsservice.member.domain.Email;
 import me.snsservice.member.repository.MemberRepository;

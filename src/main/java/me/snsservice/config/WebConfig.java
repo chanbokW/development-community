@@ -1,7 +1,7 @@
 package me.snsservice.config;
 
 import lombok.RequiredArgsConstructor;
-import me.snsservice.common.jwt.resolver.LoginMemberResolver;
+import me.snsservice.token.resolver.LoginMemberResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

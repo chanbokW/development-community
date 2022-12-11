@@ -1,7 +1,6 @@
-package me.snsservice.common.error;
+package me.snsservice.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import me.snsservice.common.error.exception.BusinessException;
 import me.snsservice.common.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

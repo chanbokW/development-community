@@ -1,4 +1,4 @@
-package me.snsservice.common.jwt.dto;
+package me.snsservice.token.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

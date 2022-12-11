@@ -1,13 +1,12 @@
 package me.snsservice.like.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.snsservice.common.jwt.anotation.LoginMember;
+import me.snsservice.token.annotation.LoginMember;
 import me.snsservice.common.response.CommonResponse;
 import me.snsservice.like.dto.ArticleLIkeStatusResponse;
 import me.snsservice.like.service.ArticleLikeService;
 import me.snsservice.member.domain.Member;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

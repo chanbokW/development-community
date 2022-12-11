@@ -1,4 +1,4 @@
-package me.snsservice.common.error;
+package me.snsservice.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

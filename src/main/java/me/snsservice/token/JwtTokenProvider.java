@@ -1,11 +1,11 @@
-package me.snsservice.common.jwt;
+package me.snsservice.token;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import me.snsservice.common.jwt.dto.AccessToken;
-import me.snsservice.common.jwt.dto.RefreshToken;
-import me.snsservice.common.jwt.dto.TokenDto;
+import me.snsservice.token.dto.AccessToken;
+import me.snsservice.token.dto.RefreshToken;
+import me.snsservice.token.dto.TokenDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

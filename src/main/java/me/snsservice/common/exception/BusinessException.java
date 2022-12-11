@@ -1,7 +1,7 @@
-package me.snsservice.common.error.exception;
+package me.snsservice.common.exception;
 
 import lombok.Getter;
-import me.snsservice.common.error.ErrorCode;
+import me.snsservice.common.exception.ErrorCode;
 
 @Getter
 public class BusinessException extends RuntimeException{

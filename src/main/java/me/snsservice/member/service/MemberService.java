@@ -1,7 +1,7 @@
 package me.snsservice.member.service;
 
 import lombok.RequiredArgsConstructor;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Email;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.domain.Nickname;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import static me.snsservice.common.error.ErrorCode.*;
+import static me.snsservice.common.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor

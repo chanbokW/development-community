@@ -6,13 +6,12 @@ import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.service.ArticleService;
-import me.snsservice.common.jwt.anotation.LoginMember;
+import me.snsservice.token.annotation.LoginMember;
 import me.snsservice.common.response.CommonResponse;
 import me.snsservice.member.domain.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
