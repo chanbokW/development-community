@@ -1,6 +1,6 @@
 package me.snsservice.config.security;
 
-import me.snsservice.token.JwtTokenProvider;
+import me.snsservice.auth.service.JwtTokenProvider;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;

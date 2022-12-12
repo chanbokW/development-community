@@ -1,7 +1,7 @@
 package me.snsservice.config.security;
 
 import lombok.extern.slf4j.Slf4j;
-import me.snsservice.token.JwtTokenProvider;
+import me.snsservice.auth.service.JwtTokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;

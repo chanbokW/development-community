@@ -6,7 +6,8 @@ import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.service.ArticleService;
-import me.snsservice.token.annotation.LoginMember;
+import me.snsservice.auth.controller.Login;
+import me.snsservice.auth.controller.LoginMember;
 import me.snsservice.common.response.CommonResponse;
 import me.snsservice.member.domain.Member;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,9 @@ public class ArticleController {
 
     @PostMapping
     public CommonResponse<Long> createArticle(@RequestBody CreateArticleRequest createArticleRequest,
-                                              @LoginMember Member member) {
+                                              @Login LoginMember loginMember) {
         return CommonResponse
-                .res(HttpStatus.CREATED, "게시물 생성", articleService.createArticle(createArticleRequest, member));
+                .res(HttpStatus.CREATED, "게시물 생성", articleService.createArticle(createArticleRequest, loginMember.getId()));
     }
 
     @GetMapping("/{articleId}")
@@ -41,14 +42,14 @@ public class ArticleController {
 
     @PutMapping("/{articleId}")
     public CommonResponse<Void> updateArticle(@PathVariable Long articleId,
-                                              @RequestBody UpdateArticleRequest updateArticleRequest, @LoginMember Member member) {
-        articleService.updateArticle(updateArticleRequest, articleId, member.getId());
+                                              @RequestBody UpdateArticleRequest updateArticleRequest, @Login LoginMember loginMember) {
+        articleService.updateArticle(updateArticleRequest, articleId, loginMember.getId());
         return CommonResponse.res(HttpStatus.OK, "게시물 수정");
     }
 
     @DeleteMapping("/{articleId}")
-    public CommonResponse<Void> deleteArticle(@PathVariable Long articleId, @LoginMember Member member) {
-        articleService.deleteArticle(articleId, member.getId());
+    public CommonResponse<Void> deleteArticle(@PathVariable Long articleId, @Login LoginMember loginMember) {
+        articleService.deleteArticle(articleId, loginMember.getId());
         return CommonResponse.res(HttpStatus.OK, "게시물 삭제");
     }
 }

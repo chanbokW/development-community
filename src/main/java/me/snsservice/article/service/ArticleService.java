@@ -9,6 +9,7 @@ import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.repository.ArticleRepository;
 import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Member;
+import me.snsservice.member.repository.MemberRepository;
 import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
 import me.snsservice.tag.repository.TagRepository;
@@ -20,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.snsservice.common.exception.ErrorCode.NOT_FOUND_ARTICLE;
-import static me.snsservice.common.exception.ErrorCode.UNAUTHORIZED_ARTICLE_MEMBER;
+import static me.snsservice.common.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +29,12 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final TagRepository tagRepository;
+    private final MemberRepository memberRepository;
 
 
     @Transactional
-    public Long createArticle(CreateArticleRequest createArticleRequest, Member member) {
+    public Long createArticle(CreateArticleRequest createArticleRequest, Long memberId) {
+        Member member = getMember(memberId);
         Article article = articleRepository.save(createArticleRequest.toEntity(member));
         Tags tags = createTags(Tags.from(createArticleRequest.getTags()));
         article.addTags(tags);
@@ -83,6 +85,11 @@ public class ArticleService {
         Article article = getArticle(articleId);
         validateArticleMEmberIdAndMemberId(article, loginId);
         article.deleteArticle();
+    }
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
     }
 
     private Article getArticle(Long articleId) {

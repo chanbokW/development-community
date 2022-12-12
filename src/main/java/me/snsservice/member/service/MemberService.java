@@ -57,6 +57,11 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
+    }
+
     private Member getMemberByEmail(String email) {
         return memberRepository.findByEmail(new Email(email))
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));

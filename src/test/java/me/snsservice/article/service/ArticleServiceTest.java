@@ -43,7 +43,7 @@ public class ArticleServiceTest {
     @DisplayName("게시물을 수정을 할 때 권한이 없으면 예외가 발생한다.")
     void modifyArticleMemberExceptionTest() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
 
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("하이요", "바이요");
 
@@ -71,7 +71,7 @@ public class ArticleServiceTest {
     @DisplayName("게시물을 수정을 할 때 권한이 없으면 예외가 발생한다.")
     void modifyArticleExceptionTest() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
 
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("하이요", "바이요");
 
@@ -88,7 +88,7 @@ public class ArticleServiceTest {
     void createArticle() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
 
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
         Article article = articleRepository.findById(articleId).get();
 
         assertThat(articleId).isNotNull();
@@ -100,7 +100,7 @@ public class ArticleServiceTest {
     void findArticleOne() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
 
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
 
         ArticleResponse findArticle = articleService.findById(articleId);
 
@@ -114,7 +114,7 @@ public class ArticleServiceTest {
     @DisplayName("게시물을 수정한다.")
     void modifyArticleTest() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
 
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("하이요", "바이요");
 
@@ -130,7 +130,7 @@ public class ArticleServiceTest {
     @DisplayName("게시물을 삭제한다.")
     void deleteArticleTest() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
 
         articleService.deleteArticle(articleId, member.getId());
         Article article = articleRepository.findById(articleId).get();
@@ -153,7 +153,7 @@ public class ArticleServiceTest {
     @DisplayName("게시물을 삭제를 할 때 권한이 없으면 예외가 발생한다.")
     void deleteArticleExceptionTest() {
         CreateArticleRequest createArticleRequest = getCreateArticleRequest();
-        Long articleId = articleService.createArticle(createArticleRequest, member);
+        Long articleId = articleService.createArticle(createArticleRequest, member.getId());
         BusinessException exception = assertThrows(
                 BusinessException.class,
                 () -> articleService.deleteArticle(articleId, 100000001L)

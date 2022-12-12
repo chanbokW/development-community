@@ -19,6 +19,10 @@ public enum ErrorCode {
     BAD_REQUEST(400, HttpStatus.BAD_REQUEST, "bad request"),
     INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "internal server error"),
 
+    // auth
+    INVALID_TOKEN_VALUE(401, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰"),
+    NOT_FOUND_TOKEN(401, HttpStatus.UNAUTHORIZED, "로그인이 필요"),
+
     // member
     NOT_FOUND_MEMBER(404, HttpStatus.NOT_FOUND, "존재하지 않는 회원"),
     EXISTS_EMAIL(403, HttpStatus.FORBIDDEN, "이미 존재하는 이메일"),

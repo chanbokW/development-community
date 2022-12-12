@@ -1,13 +1,14 @@
-package me.snsservice.token.resolver;
+package me.snsservice.auth.resolver;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.snsservice.common.exception.ErrorCode;
+import me.snsservice.auth.domain.CustomUserDetails;
+import me.snsservice.auth.controller.Login;
+import me.snsservice.auth.controller.LoginMember;
+import me.snsservice.auth.service.JwtTokenProvider;
 import me.snsservice.common.exception.BusinessException;
-import me.snsservice.token.JwtTokenProvider;
-import me.snsservice.token.annotation.LoginMember;
+import me.snsservice.common.exception.ErrorCode;
 import me.snsservice.config.security.JwtFilter;
-import me.snsservice.member.domain.Email;
 import me.snsservice.member.repository.MemberRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -22,25 +23,27 @@ import java.util.Optional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class LoginMemberResolver implements HandlerMethodArgumentResolver {
+public class LoginResolver implements HandlerMethodArgumentResolver {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(LoginMember.class);
+        return parameter.hasParameterAnnotation(Login.class);
     }
 
+    // TODO Exception 처리
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         return Optional.ofNullable(request.getHeader(JwtFilter.AUTHORIZATION_HEADER))
                 .map(authorization -> authorization.split("Bearer")[1])
-                .map(jwtTokenProvider::getAuthentication)
-                .map(authentication -> authentication.getName())
-                .map(email -> memberRepository.findByEmail(new Email(email))
-                        .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER)))
+                .map(it -> jwtTokenProvider.getAuthentication(it))
+                .map(authentication -> {
+                    CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+                    return new LoginMember(principal.getId(), principal.getEmail());
+                })
                 .orElseThrow(() -> new BusinessException(ErrorCode.BAD_REQUEST));
     }
 }
