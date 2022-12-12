@@ -93,6 +93,7 @@ public class ArticleServiceTest {
 
         assertThat(articleId).isNotNull();
         assertThat(articleId).isEqualTo(article.getId());
+        assertThat(article.getArticleTags().get(0).getArticle()).isEqualTo(article);
     }
 
     @Test

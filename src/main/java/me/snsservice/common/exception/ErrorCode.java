@@ -42,7 +42,8 @@ public enum ErrorCode {
     INVALID_ARTICLE_CONTENT(400, HttpStatus.BAD_REQUEST, "본문은 2자이상 500자이하 문자를 입력하세요."),
 
     // tag
-    DUPLICATE_TAG(400,HttpStatus.BAD_REQUEST, "중복되는 태그 입력");
+    DUPLICATE_TAG(400,HttpStatus.BAD_REQUEST, "중복되는 태그 입력"),
+    INVALID_TAGS_SIZE(400, HttpStatus.BAD_REQUEST, "태그는 10개를 초과 할 수 없습니다.");
 
     private final int code;
     private final HttpStatus httpStatus;

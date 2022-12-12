@@ -36,26 +36,44 @@ public class ArticleService {
     public Long createArticle(CreateArticleRequest createArticleRequest, Long memberId) {
         Member member = getMember(memberId);
         Article article = articleRepository.save(createArticleRequest.toEntity(member));
-        Tags tags = createTags(Tags.from(createArticleRequest.getTags()));
+        Tags tags = createTags(createArticleRequest.getTags()); // 저장 태그
         article.addTags(tags);
         return article.getId();
     }
 
-    private Tags createTags(Tags tags) {
-        return new Tags(tags.getTagNames().stream()
-                .map(this::createTag)
-                .collect(Collectors.toList()));
+    // Todo tag관련 클래스로 옮기기
+    private Tags createTags(List<String> tags) {
+        Tags findTags = findTags(tags);
+        Tags tag = removeAllTags(Tags.from(tags), findTags);
+        List<Tag> saveTags = saveAllTags(tag);
+        return addTags(new Tags(saveTags), findTags);
     }
 
-    private Tag createTag(String name) {
-        return tagRepository.findByName(name)
-                .orElseGet(() -> tagRepository.save(new Tag(name)));
+    // Todo tag관련 클래스로 옮기기
+    private Tags removeAllTags(Tags requestTags, Tags findTags) {
+        Tags newTags = requestTags.removeAllByName(findTags);
+        return newTags;
+    }
+
+    // Todo tag관련 클래스로 옮기기
+    private List<Tag> saveAllTags(Tags newTags) {
+        return tagRepository.saveAll(newTags.getTags());
+    }
+
+    // Todo tag관련 클래스로 옮기기
+    private Tags addTags(Tags newTags, Tags findTags) {
+        return findTags.addAllTags(newTags);
+    }
+
+    // Todo tag관련 클래스로 옮기기
+    private Tags findTags(List<String> tagNames) {
+        return new Tags(tagRepository.findByNameIn(tagNames));
     }
 
     @Transactional
     public ArticleResponse findById(Long articleId) {
         Article article = articleRepository.findByIdWithAll(articleId)
-                        .orElseThrow(()-> new BusinessException(NOT_FOUND_ARTICLE));
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_ARTICLE));
         article.addViewCount();
         return ArticleResponse.of(article);
     }

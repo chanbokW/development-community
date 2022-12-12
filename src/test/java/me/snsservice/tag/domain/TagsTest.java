@@ -36,4 +36,15 @@ public class TagsTest {
         BusinessException exception = assertThrows(BusinessException.class, () -> Tags.from(taglist));
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.DUPLICATE_TAG);
     }
+
+    @Test
+    @DisplayName("테그를 10개를 초과시 예외가 발생한다.")
+    void validateDuplicateTagSize() {
+        List<String> taglist = List.of(
+                "Hello", "Java", "Good", "NodeJs", "NestJs", "Spring", "Jpa", "hibernate", "docker", "aws", "redis"
+        );
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> Tags.from(taglist));
+        assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.INVALID_TAGS_SIZE);
+    }
 }
