@@ -12,12 +12,21 @@ import me.snsservice.common.exception.BusinessException;
 @Getter
 public class Tags {
 
+    private static final int TAGS_MIN_SIZE = 1;
     private static final int TAGS_MAX_SIZE = 10;
     private List<Tag> tags;
 
     public Tags(List<Tag> tags) {
         validateDuplicateTag(tags);
+        validateTagsSize(tags);
         this.tags = tags;
+    }
+
+    private void validateTagsSize(List<Tag> tags) {
+        int size = tags.size();
+        if (size < TAGS_MIN_SIZE || size > TAGS_MAX_SIZE) {
+            throw new BusinessException(ErrorCode.INVALID_TAGS_SIZE);
+        }
     }
 
     public static Tags from(List<String> tags) {
@@ -37,10 +46,6 @@ public class Tags {
 
         if (count != tags.size()) {
             throw new BusinessException(ErrorCode.DUPLICATE_TAG);
-        }
-
-        if (count > TAGS_MAX_SIZE) {
-            throw new BusinessException(ErrorCode.INVALID_TAGS_SIZE);
         }
     }
 

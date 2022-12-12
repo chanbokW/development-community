@@ -43,7 +43,7 @@ public enum ErrorCode {
 
     // tag
     DUPLICATE_TAG(400,HttpStatus.BAD_REQUEST, "중복되는 태그 입력"),
-    INVALID_TAGS_SIZE(400, HttpStatus.BAD_REQUEST, "태그는 10개를 초과 할 수 없습니다.");
+    INVALID_TAGS_SIZE(400, HttpStatus.BAD_REQUEST, "태그는 1개이상 10개이하를 입력하세요.");
 
     private final int code;
     private final HttpStatus httpStatus;
