@@ -17,12 +17,10 @@ public class Tags {
     private List<Tag> tags;
 
     public Tags(List<Tag> tags) {
-        validateDuplicateTag(tags);
-        validateTagsSize(tags);
         this.tags = tags;
     }
 
-    private void validateTagsSize(List<Tag> tags) {
+    private static void validateTagsSize(List<String> tags) {
         int size = tags.size();
         if (size < TAGS_MIN_SIZE || size > TAGS_MAX_SIZE) {
             throw new BusinessException(ErrorCode.INVALID_TAGS_SIZE);
@@ -30,6 +28,8 @@ public class Tags {
     }
 
     public static Tags from(List<String> tags) {
+        validateDuplicateTag(tags);
+        validateTagsSize(tags);
         return new Tags(tags.stream()
                 .map(Tag::new)
                 .collect(Collectors.toList()));
@@ -38,9 +38,8 @@ public class Tags {
     /**
      * Tag 이름 중복 검사
      */
-    private void validateDuplicateTag(List<Tag> tags) {
+    private static void validateDuplicateTag(List<String> tags) {
         long count = tags.stream()
-                .map(Tag::getName)
                 .distinct()
                 .count();
 
