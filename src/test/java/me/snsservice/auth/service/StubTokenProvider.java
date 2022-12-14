@@ -3,44 +3,43 @@ package me.snsservice.auth.service;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import me.snsservice.auth.domain.CustomUserDetails;
 import me.snsservice.common.exception.BusinessException;
 import me.snsservice.common.exception.ErrorCode;
 import me.snsservice.member.domain.Role;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
-import static me.snsservice.auth.domain.JwtExpiration.ACCESS_TOKEN_EXPIRED_TIME;
-import static me.snsservice.auth.domain.JwtExpiration.REFRESH_TOKEN_EXPIRED_TIME;
-
-@Slf4j
-@Component
-public class JwtTokenProvider implements TokenProvider<Claims> {
+/**
+ * Test용도 TokenProvider
+ */
+public class StubTokenProvider implements TokenProvider<Claims> {
 
     private static final String AUTHORITIES_KEY = "role";
     private static final String MEMBER_ID = "memberId";
     private final String secret;
     private final Key key;
+    private final long accessTokenExpiredTime;
+    private final long refreshTokenExpiredTime;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
+    public StubTokenProvider(String secret, long accessTokenExpiredTime, long refreshTokenExpiredTime) {
         this.secret = secret;
+        this.accessTokenExpiredTime = accessTokenExpiredTime;
+        this.refreshTokenExpiredTime = refreshTokenExpiredTime;
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
     @Override
     public String createAccessToken(Long memberId, String email, Role role) {
-        return createToken(memberId, email, role, ACCESS_TOKEN_EXPIRED_TIME.getTime());
+        return createToken(memberId, email, role, accessTokenExpiredTime);
     }
 
     @Override
     public String createRefreshToken(Long memberId, String email, Role role) {
-        return createToken(memberId, email, role, REFRESH_TOKEN_EXPIRED_TIME.getTime());
+        return createToken(memberId, email, role, refreshTokenExpiredTime);
     }
 
     private String createToken(Long memberId, String email, Role role, Long expiredTime) {
@@ -55,21 +54,13 @@ public class JwtTokenProvider implements TokenProvider<Claims> {
                 .compact();
     }
 
-    // TODO Exception 처리
     @Override
     public Claims getClaims(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 Jwt 토큰입니다.");
-            return e.getClaims();
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.INVALID_TOKEN_VALUE);
-        }
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     @Override
