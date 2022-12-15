@@ -2,8 +2,10 @@ package me.snsservice.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.snsservice.auth.dto.AccessTokenRequest;
+import me.snsservice.auth.dto.AccessTokenResponse;
 import me.snsservice.auth.dto.LoginRequest;
-import me.snsservice.auth.dto.TokenDto;
+import me.snsservice.auth.dto.TokenResponse;
 import me.snsservice.auth.service.AuthService;
 import me.snsservice.common.response.CommonResponse;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,17 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public CommonResponse<TokenDto> signup(@RequestBody LoginRequest loginRequest) {
+    public CommonResponse<TokenResponse> signup(@RequestBody LoginRequest loginRequest) {
         return CommonResponse.res(HttpStatus.OK, "로그인 후 토큰 발급", authService.login(loginRequest.getEmail(), loginRequest.getPassword()));
     }
 
+    @PostMapping("/reissue")
+    public CommonResponse<AccessTokenResponse> reissue(@RequestBody AccessTokenRequest accessTokenRequest) {
+        return CommonResponse.res(HttpStatus.OK, "accssToken 재발급", authService.reissue(accessTokenRequest.getRefreshToken()));
+    }
+
+    @PostMapping("/logout")
+    public void logout() {
+        /** @TODO logout */
+    }
 }
