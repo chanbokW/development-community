@@ -1,6 +1,7 @@
 package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.article.controller.ArticleSearchOption;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleListResponse;
 import me.snsservice.article.dto.ArticleResponse;
@@ -14,6 +15,7 @@ import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
 import me.snsservice.tag.repository.TagRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,8 +89,13 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ArticleListResponse> findAllWithArticle(Pageable pageable) {
-        return articleRepository.findAllWithArticle(pageable);
+    public List<ArticleListResponse> findAllWithArticle(ArticleSearchOption articleSearchOption, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Article> articles = articleRepository.findAllByKeyword(articleSearchOption.getKeyword(), articleSearchOption.getOptionType(), pageable);
+
+        return articles.getContent().stream()
+                .map(ArticleListResponse::of)
+                .collect(Collectors.toList());
     }
 
     @Transactional
