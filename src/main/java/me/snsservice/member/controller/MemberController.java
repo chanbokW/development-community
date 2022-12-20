@@ -1,6 +1,7 @@
 package me.snsservice.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.common.response.CommonResponse;
 import me.snsservice.member.dto.CreateMemberRequest;
 import me.snsservice.member.dto.MemberResponse;
 import me.snsservice.member.dto.UpdateMemberRequest;
@@ -22,20 +23,20 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Long> createMember(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(memberService.createMember(createMemberRequest.toEntity()));
+    public CommonResponse<Long> createMember(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
+        return CommonResponse
+                .res(HttpStatus.CREATED, "회원가입", memberService.createMember(createMemberRequest));
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MemberResponse> showMe(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(memberService.findOneMember(userDetails.getUsername()));
+    public CommonResponse<MemberResponse> showMe(@AuthenticationPrincipal UserDetails userDetails) {
+        return CommonResponse.res(HttpStatus.OK, "마이페이지 조회", memberService.findOneMember(userDetails.getUsername()));
     }
 
     @PutMapping
-    public ResponseEntity<MemberResponse> updateMember(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateMemberRequest updateMemberRequest) {
-        return ResponseEntity.ok()
-                .body(memberService.updateMember(userDetails.getUsername(), updateMemberRequest));
+    public CommonResponse<MemberResponse> updateMember(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateMemberRequest updateMemberRequest) {
+        return CommonResponse
+                .res(HttpStatus.OK, "회원 수정", memberService.updateMember(userDetails.getUsername(), updateMemberRequest));
     }
 }
 

@@ -3,7 +3,7 @@ package me.snsservice.like.service;
 import lombok.RequiredArgsConstructor;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.repository.ArticleRepository;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.exception.BusinessException;
 import me.snsservice.like.domain.ArticleLike;
 import me.snsservice.like.dto.ArticleLIkeStatusResponse;
 import me.snsservice.like.repository.ArticleLikeRepository;
@@ -12,9 +12,7 @@ import me.snsservice.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
-
-import static me.snsservice.common.error.ErrorCode.*;
+import static me.snsservice.common.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor

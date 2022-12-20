@@ -1,27 +1,31 @@
 package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.article.controller.ArticleSearchOption;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleListResponse;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.repository.ArticleRepository;
-import me.snsservice.common.error.exception.BusinessException;
+import me.snsservice.common.NoOffsetPageRequest;
+import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Member;
+import me.snsservice.member.repository.MemberRepository;
 import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
 import me.snsservice.tag.repository.TagRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.snsservice.common.error.ErrorCode.NOT_FOUND_ARTICLE;
-import static me.snsservice.common.error.ErrorCode.UNAUTHORIZED_ARTICLE_MEMBER;
+import static me.snsservice.common.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,46 +33,76 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final TagRepository tagRepository;
+    private final MemberRepository memberRepository;
 
 
     @Transactional
-    public Long createArticle(CreateArticleRequest createArticleRequest, Member member) {
+    public Long createArticle(CreateArticleRequest createArticleRequest, Long memberId) {
+        Member member = getMember(memberId);
         Article article = articleRepository.save(createArticleRequest.toEntity(member));
-        Tags tags = createTags(Tags.from(createArticleRequest.getTags()));
+        Tags tags = createTags(createArticleRequest.getTags()); // 저장 태그
         article.addTags(tags);
         return article.getId();
     }
 
-    private Tags createTags(Tags tags) {
-        return new Tags(tags.getTagNames().stream()
-                .map(this::createTag)
-                .collect(Collectors.toList()));
+    // Todo tag관련 클래스로 옮기기
+    private Tags createTags(List<String> tags) {
+        Tags findTags = findTags(tags);
+        Tags tag = removeAllTags(Tags.from(tags), findTags);
+        List<Tag> saveTags = saveAllTags(tag);
+        return addTags(new Tags(saveTags), findTags);
     }
 
-    private Tag createTag(String name) {
-        return tagRepository.findByName(name)
-                .orElseGet(() -> tagRepository.save(new Tag(name)));
+    // Todo tag관련 클래스로 옮기기
+    private Tags removeAllTags(Tags requestTags, Tags findTags) {
+        Tags newTags = requestTags.removeAllByName(findTags);
+        return newTags;
+    }
+
+    // Todo tag관련 클래스로 옮기기
+    private List<Tag> saveAllTags(Tags newTags) {
+        return tagRepository.saveAll(newTags.getTags());
+    }
+
+    // Todo tag관련 클래스로 옮기기
+    private Tags addTags(Tags newTags, Tags findTags) {
+        return findTags.addAllTags(newTags);
+    }
+
+    // Todo tag관련 클래스로 옮기기
+    private Tags findTags(List<String> tagNames) {
+        return new Tags(tagRepository.findByNameIn(tagNames));
     }
 
     @Transactional
     public ArticleResponse findById(Long articleId) {
         Article article = articleRepository.findByIdWithAll(articleId)
-                        .orElseThrow(()-> new BusinessException(NOT_FOUND_ARTICLE));
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_ARTICLE));
         article.addViewCount();
         return ArticleResponse.of(article);
     }
 
-    //Todo paging 처리
     @Transactional(readOnly = true)
-    public List<ArticleListResponse> findAll() {
-        return articleRepository.findAllArticles().stream()
+    public List<ArticleListResponse> findAllArticlesByKeyword(ArticleSearchOption articleSearchOption, NoOffsetPageRequest noOffsetPageRequest) {
+        List<Article> articles =
+                articleRepository.findAllArticlesByKeyword(articleSearchOption.getKeyword(), articleSearchOption.getOptionType(), noOffsetPageRequest);
+        return articles.stream()
                 .map(ArticleListResponse::of)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public Page<ArticleListResponse> findAllWithArticle(Pageable pageable) {
-        return articleRepository.findAllWithArticle(pageable);
+    public List<ArticleListResponse> findAllArticlesByTagNames(String tags, NoOffsetPageRequest noOffsetPageRequest) {
+        List<String> tagNmaes = extractTagName(tags);
+        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(tagNmaes, noOffsetPageRequest);
+        List<Article> articles = articleRepository.findAllArticlesByIdIn(articleIds);
+        return articles.stream()
+                .map(ArticleListResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> extractTagName(String tags) {
+        return Arrays.asList(tags.split(","));
     }
 
     @Transactional
@@ -83,6 +117,11 @@ public class ArticleService {
         Article article = getArticle(articleId);
         validateArticleMEmberIdAndMemberId(article, loginId);
         article.deleteArticle();
+    }
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_MEMBER));
     }
 
     private Article getArticle(Long articleId) {

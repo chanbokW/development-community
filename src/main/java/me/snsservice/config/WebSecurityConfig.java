@@ -1,7 +1,7 @@
 package me.snsservice.config;
 
 import lombok.RequiredArgsConstructor;
-import me.snsservice.common.jwt.JwtTokenProvider;
+import me.snsservice.auth.service.JwtTokenProvider;
 import me.snsservice.config.security.JwtAccessDeniedHandler;
 import me.snsservice.config.security.JwtAuthenticationEntryPoint;
 import me.snsservice.config.security.JwtSecurityConfig;

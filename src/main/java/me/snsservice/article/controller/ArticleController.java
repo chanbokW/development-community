@@ -6,11 +6,11 @@ import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.service.ArticleService;
-import me.snsservice.common.jwt.anotation.LoginMember;
-import me.snsservice.member.domain.Member;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import me.snsservice.auth.controller.Login;
+import me.snsservice.auth.controller.LoginMember;
+import me.snsservice.common.NoOffsetPageRequest;
+import me.snsservice.common.response.CommonResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,32 +23,50 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping
-    public ResponseEntity<Long> createArticle(@RequestBody CreateArticleRequest createArticleRequest,
-                                              @LoginMember Member member) {
-        return ResponseEntity.ok().body(articleService.createArticle(createArticleRequest, member));
+    public CommonResponse<Long> createArticle(@RequestBody CreateArticleRequest createArticleRequest,
+                                              @Login LoginMember loginMember) {
+        Long articleId = articleService.createArticle(createArticleRequest, loginMember.getId());
+        return CommonResponse.res(HttpStatus.CREATED, "게시물 생성", articleId);
     }
 
     @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleResponse> findOneArticle(@PathVariable Long articleId) {
-        return ResponseEntity.ok().body(articleService.findById(articleId));
+    public CommonResponse<ArticleResponse> findOneArticle(@PathVariable Long articleId) {
+        ArticleResponse articleResponse = articleService.findById(articleId);
+        return CommonResponse.res(HttpStatus.OK, "게시물 단건 조회", articleResponse);
     }
 
-    // Todo 페이징
     @GetMapping
-    public ResponseEntity<Page<ArticleListResponse>> findAllArticle(Pageable pageable) {
-        return ResponseEntity.ok().body(articleService.findAllWithArticle(pageable));
+    public CommonResponse<List<ArticleListResponse>> findAllArticle(
+            ArticleSearchOption articleSearchOption,
+            @RequestParam(name = "current", required = false) Long currentArticleId,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        NoOffsetPageRequest noOffsetPageRequest = NoOffsetPageRequest.of(currentArticleId, size);
+        List<ArticleListResponse> articles = articleService.findAllArticlesByKeyword(articleSearchOption, noOffsetPageRequest);
+        return CommonResponse.res(HttpStatus.OK, "게시물 전체 및 검색 조회", articles);
+    }
+
+    @GetMapping("/search/tags")
+    public CommonResponse<List<ArticleListResponse>> findAllArticlesByTagNames(
+            @RequestParam String tags,
+            @RequestParam(name = "current", required = false) Long currentArticleId,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        NoOffsetPageRequest noOffsetPageRequest = NoOffsetPageRequest.of(currentArticleId, size);
+        List<ArticleListResponse> articles = articleService.findAllArticlesByTagNames(tags, noOffsetPageRequest);
+        return CommonResponse.res(HttpStatus.OK, "태그로 게시물 조회", articles);
     }
 
     @PutMapping("/{articleId}")
-    public ResponseEntity<Void> updateArticle(@PathVariable Long articleId,
-              @RequestBody UpdateArticleRequest updateArticleRequest, @LoginMember Member member) {
-        articleService.updateArticle(updateArticleRequest, articleId, member.getId());
-        return ResponseEntity.ok().build();
+    public CommonResponse<Void> updateArticle(@PathVariable Long articleId,
+                                              @RequestBody UpdateArticleRequest updateArticleRequest, @Login LoginMember loginMember) {
+        articleService.updateArticle(updateArticleRequest, articleId, loginMember.getId());
+        return CommonResponse.res(HttpStatus.OK, "게시물 수정");
     }
 
     @DeleteMapping("/{articleId}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long articleId, @LoginMember Member member) {
-        articleService.deleteArticle(articleId, member.getId());
-        return ResponseEntity.ok().build();
+    public CommonResponse<Void> deleteArticle(@PathVariable Long articleId, @Login LoginMember loginMember) {
+        articleService.deleteArticle(articleId, loginMember.getId());
+        return CommonResponse.res(HttpStatus.OK, "게시물 삭제");
     }
 }

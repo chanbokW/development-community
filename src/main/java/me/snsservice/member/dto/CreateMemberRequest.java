@@ -2,6 +2,7 @@ package me.snsservice.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.domain.Role;
 import org.hibernate.validator.constraints.Length;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class CreateMemberRequest {
 
