@@ -17,5 +17,7 @@ public interface ArticleCustomRepository {
     List<Article> findAllArticlesByKeyword(String keyword, ArticleOptionType optionType, NoOffsetPageRequest noOffsetPageRequest);
     List<Article> findAllArticles();
 
-    List<Long> findAllArticleIdsByTagNames(List<String> search, Pageable pageable);
+    List<Long> findAllArticleIdsByTagNames(List<String> search, NoOffsetPageRequest noOffsetPageRequest);
+
+    List<Article> findAllArticlesByIdIn(List<Long> articleIds);
 }

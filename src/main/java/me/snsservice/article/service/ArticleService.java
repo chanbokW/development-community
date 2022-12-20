@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,10 +91,20 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public List<ArticleListResponse> findAllArticlesByTagNames(String tags, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return null;
+    @Transactional(readOnly = true)
+    public List<ArticleListResponse> findAllArticlesByTagNames(String tags, NoOffsetPageRequest noOffsetPageRequest) {
+        List<String> tagNmaes = extractTagName(tags);
+        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(tagNmaes, noOffsetPageRequest);
+        List<Article> articles = articleRepository.findAllArticlesByIdIn(articleIds);
+        return articles.stream()
+                .map(ArticleListResponse::of)
+                .collect(Collectors.toList());
     }
+
+    private List<String> extractTagName(String tags) {
+        return Arrays.asList(tags.split(","));
+    }
+
     @Transactional
     public void updateArticle(UpdateArticleRequest request, Long articleId, Long loginId) {
         Article article = getArticle(articleId);

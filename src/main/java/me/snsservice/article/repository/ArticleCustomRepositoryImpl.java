@@ -115,16 +115,27 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
                 .fetch();
     }
 
-    public List<Long> findAllArticleIdsByTagNames(List<String> tagNames, Pageable pageable) {
+    public List<Long> findAllArticleIdsByTagNames(List<String> tagNames, NoOffsetPageRequest noOffsetPageRequest) {
         return query.selectDistinct(article.id)
                 .from(article)
                 .join(article.articleTags, articleTag)
                 .join(articleTag.tag, tag)
                 .where(
-                        searchByTagNames(tagNames)
-                ).limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                        searchByTagNames(tagNames),
+                        eqActivated(true),
+                        article.id.lt(noOffsetPageRequest.getCurrent())
+                ).limit(noOffsetPageRequest.getSize())
+                .orderBy(article.id.desc())
                 .fetch();
+    }
+
+    @Override
+    public List<Article> findAllArticlesByIdIn(List<Long> articleIds) {
+        return query.selectFrom(article)
+                .join(article.member, member).fetchJoin()
+                .where(
+                        article.id.in(articleIds)
+                ).fetch();
     }
 
     private BooleanExpression searchByTagNames(List<String> tagNames) {

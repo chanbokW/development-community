@@ -47,11 +47,14 @@ public class ArticleController {
     }
 
     @GetMapping("/search/tags")
-    public CommonResponse<?> findAllArticlesByTagNames(
+    public CommonResponse<List<ArticleListResponse>> findAllArticlesByTagNames(
             @RequestParam String tags,
             @RequestParam(name = "current", required = false) Long currentArticleId,
-            @RequestParam(defaultValue = "10") int size) {
-        return CommonResponse.res(HttpStatus.OK, "태그로 게시물 조회");
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        NoOffsetPageRequest noOffsetPageRequest = NoOffsetPageRequest.of(currentArticleId, size);
+        List<ArticleListResponse> articles = articleService.findAllArticlesByTagNames(tags, noOffsetPageRequest);
+        return CommonResponse.res(HttpStatus.OK, "태그로 게시물 조회", articles);
     }
 
     @PutMapping("/{articleId}")

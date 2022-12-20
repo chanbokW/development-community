@@ -1,6 +1,7 @@
 package me.snsservice.article.repository;
 
 import me.snsservice.article.domain.Article;
+import me.snsservice.common.NoOffsetPageRequest;
 import me.snsservice.config.JpaAuditingConfig;
 import me.snsservice.config.QueryDslConfig;
 import me.snsservice.member.domain.Member;
@@ -79,9 +80,11 @@ public class ArticleRepositoryTest {
     @DisplayName("태그로 검색시 ArticleIds 값을 리스트 형태로 반환합니다.")
     void findArticleIdsTest() {
         List<String> list = List.of("Java", "Kotlin", "Spring");
-        Pageable pageRequest = PageRequest.of(0, 10);
-        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(list, pageRequest);
+        NoOffsetPageRequest noOffsetPageRequest = NoOffsetPageRequest.of(null, 10);
+        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(list, noOffsetPageRequest);
+        List<Article> articles = articleRepository.findAllArticlesByIdIn(articleIds);
 
         assertThat(articleIds.size()).isEqualTo(4);
+        assertThat(articles.size()).isEqualTo(4);
     }
 }
