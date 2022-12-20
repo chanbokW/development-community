@@ -1,7 +1,8 @@
 package me.snsservice.article.repository;
 
+import me.snsservice.article.controller.ArticleOptionType;
 import me.snsservice.article.domain.Article;
-import me.snsservice.article.dto.ArticleListResponse;
+import me.snsservice.common.NoOffsetPageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,7 +12,12 @@ import java.util.Optional;
 public interface ArticleCustomRepository {
     Optional<Article> findByIdWithAll(Long id);
 
-    Page<ArticleListResponse> findAllWithArticle(Pageable pageable);
+//    Page<ArticleListResponse> findAllByKeyword(ArticleSearchOption articleSearchOption, Pageable pageable);
 
+    List<Article> findAllArticlesByKeyword(String keyword, ArticleOptionType optionType, NoOffsetPageRequest noOffsetPageRequest);
     List<Article> findAllArticles();
+
+    List<Long> findAllArticleIdsByTagNames(List<String> search, NoOffsetPageRequest noOffsetPageRequest);
+
+    List<Article> findAllArticlesByIdIn(List<Long> articleIds);
 }

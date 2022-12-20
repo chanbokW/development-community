@@ -1,12 +1,14 @@
 package me.snsservice.article.service;
 
 import lombok.RequiredArgsConstructor;
+import me.snsservice.article.controller.ArticleSearchOption;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleListResponse;
 import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.repository.ArticleRepository;
+import me.snsservice.common.NoOffsetPageRequest;
 import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
@@ -14,10 +16,12 @@ import me.snsservice.tag.domain.Tag;
 import me.snsservice.tag.domain.Tags;
 import me.snsservice.tag.repository.TagRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,17 +82,27 @@ public class ArticleService {
         return ArticleResponse.of(article);
     }
 
-    //Todo paging 처리
     @Transactional(readOnly = true)
-    public List<ArticleListResponse> findAll() {
-        return articleRepository.findAllArticles().stream()
+    public List<ArticleListResponse> findAllArticlesByKeyword(ArticleSearchOption articleSearchOption, NoOffsetPageRequest noOffsetPageRequest) {
+        List<Article> articles =
+                articleRepository.findAllArticlesByKeyword(articleSearchOption.getKeyword(), articleSearchOption.getOptionType(), noOffsetPageRequest);
+        return articles.stream()
                 .map(ArticleListResponse::of)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public Page<ArticleListResponse> findAllWithArticle(Pageable pageable) {
-        return articleRepository.findAllWithArticle(pageable);
+    public List<ArticleListResponse> findAllArticlesByTagNames(String tags, NoOffsetPageRequest noOffsetPageRequest) {
+        List<String> tagNmaes = extractTagName(tags);
+        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(tagNmaes, noOffsetPageRequest);
+        List<Article> articles = articleRepository.findAllArticlesByIdIn(articleIds);
+        return articles.stream()
+                .map(ArticleListResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> extractTagName(String tags) {
+        return Arrays.asList(tags.split(","));
     }
 
     @Transactional
