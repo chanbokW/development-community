@@ -7,6 +7,7 @@ import me.snsservice.article.controller.ArticleOptionType;
 import me.snsservice.article.controller.ArticleSearchOption;
 import me.snsservice.article.domain.Article;
 import me.snsservice.article.dto.ArticleListResponse;
+import me.snsservice.common.NoOffsetPageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -67,21 +68,19 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
 //    }
 
     @Override
-    public Page<Article> findAllByKeyword(String keyword, ArticleOptionType optionType, Pageable pageable) {
+    public List<Article> findAllArticlesByKeyword(String keyword, ArticleOptionType optionType, NoOffsetPageRequest pageable) {
         List<Article> fetch = query.selectFrom(article)
                 .join(article.member, member).fetchJoin()
                 .where(
-                        searchByKeyword(keyword, optionType)
+                        searchByKeyword(keyword, optionType),
+                        eqActivated(true),
+                        article.id.lt(pageable.getCurrent())
                 )
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                .limit(pageable.getSize())
                 .orderBy(article.id.desc())
                 .fetch();
 
-        JPAQuery<Long> count = query.select(article.count())
-                .from(article)
-                .where(eqActivated(true));
-        return PageableExecutionUtils.getPage(fetch, pageable, count::fetchOne);
+        return fetch;
     }
 
     private BooleanExpression eqActivated(boolean isStatus) {
@@ -116,14 +115,16 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
                 .fetch();
     }
 
-    public List<Long> findAllArticleIdsByTagNames(List<String> tagNames) {
+    public List<Long> findAllArticleIdsByTagNames(List<String> tagNames, Pageable pageable) {
         return query.selectDistinct(article.id)
                 .from(article)
                 .join(article.articleTags, articleTag)
                 .join(articleTag.tag, tag)
                 .where(
                         searchByTagNames(tagNames)
-                ).fetch();
+                ).limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
     }
 
     private BooleanExpression searchByTagNames(List<String> tagNames) {

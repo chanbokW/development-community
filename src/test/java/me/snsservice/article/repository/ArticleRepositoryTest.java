@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -77,7 +79,8 @@ public class ArticleRepositoryTest {
     @DisplayName("태그로 검색시 ArticleIds 값을 리스트 형태로 반환합니다.")
     void findArticleIdsTest() {
         List<String> list = List.of("Java", "Kotlin", "Spring");
-        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(list);
+        Pageable pageRequest = PageRequest.of(0, 10);
+        List<Long> articleIds = articleRepository.findAllArticleIdsByTagNames(list, pageRequest);
 
         assertThat(articleIds.size()).isEqualTo(4);
     }

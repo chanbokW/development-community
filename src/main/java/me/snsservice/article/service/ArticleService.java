@@ -8,6 +8,7 @@ import me.snsservice.article.dto.ArticleResponse;
 import me.snsservice.article.dto.CreateArticleRequest;
 import me.snsservice.article.dto.UpdateArticleRequest;
 import me.snsservice.article.repository.ArticleRepository;
+import me.snsservice.common.NoOffsetPageRequest;
 import me.snsservice.common.exception.BusinessException;
 import me.snsservice.member.domain.Member;
 import me.snsservice.member.repository.MemberRepository;
@@ -80,24 +81,19 @@ public class ArticleService {
         return ArticleResponse.of(article);
     }
 
-    //Todo paging 처리
     @Transactional(readOnly = true)
-    public List<ArticleListResponse> findAll() {
-        return articleRepository.findAllArticles().stream()
+    public List<ArticleListResponse> findAllArticlesByKeyword(ArticleSearchOption articleSearchOption, NoOffsetPageRequest noOffsetPageRequest) {
+        List<Article> articles =
+                articleRepository.findAllArticlesByKeyword(articleSearchOption.getKeyword(), articleSearchOption.getOptionType(), noOffsetPageRequest);
+        return articles.stream()
                 .map(ArticleListResponse::of)
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<ArticleListResponse> findAllWithArticle(ArticleSearchOption articleSearchOption, int page, int size) {
+    public List<ArticleListResponse> findAllArticlesByTagNames(String tags, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Article> articles = articleRepository.findAllByKeyword(articleSearchOption.getKeyword(), articleSearchOption.getOptionType(), pageable);
-
-        return articles.getContent().stream()
-                .map(ArticleListResponse::of)
-                .collect(Collectors.toList());
+        return null;
     }
-
     @Transactional
     public void updateArticle(UpdateArticleRequest request, Long articleId, Long loginId) {
         Article article = getArticle(articleId);
