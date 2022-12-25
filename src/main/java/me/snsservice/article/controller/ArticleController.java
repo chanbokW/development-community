@@ -61,12 +61,12 @@ public class ArticleController {
     public CommonResponse<Void> updateArticle(@PathVariable Long articleId,
                                               @RequestBody UpdateArticleRequest updateArticleRequest, @Login LoginMember loginMember) {
         articleService.updateArticle(updateArticleRequest, articleId, loginMember.getId());
-        return CommonResponse.res(HttpStatus.OK, "게시물 수정");
+        return CommonResponse.res(HttpStatus.NO_CONTENT, "게시물 수정");
     }
 
     @DeleteMapping("/{articleId}")
     public CommonResponse<Void> deleteArticle(@PathVariable Long articleId, @Login LoginMember loginMember) {
         articleService.deleteArticle(articleId, loginMember.getId());
-        return CommonResponse.res(HttpStatus.OK, "게시물 삭제");
+        return CommonResponse.res(HttpStatus.NO_CONTENT, "게시물 삭제");
     }
 }

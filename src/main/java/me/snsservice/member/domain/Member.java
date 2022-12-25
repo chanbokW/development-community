@@ -38,6 +38,13 @@ public class Member extends BaseTimeEntity {
         this.role = role;
     }
 
+    public Member(String email, String nickname, String password) {
+        this.email = new Email(email);
+        this.nickname = new Nickname(nickname);
+        this.password = Password.from(password);
+        this.role = Role.ROLE_MEMBER;
+    }
+
     // Todo Embeddable 생성해서 관리하기
     public Member passwordEncode(PasswordEncoder encoder) {
         this.password = Password.encrypt(this.password.value(), encoder);
