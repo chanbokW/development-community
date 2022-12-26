@@ -27,8 +27,7 @@ public class MemberController {
     @PostMapping("/signup")
     public CommonResponse<Long> createMember(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
         Long memberId = memberService.createMember(createMemberRequest);
-        return CommonResponse
-                .res(HttpStatus.CREATED, "회원가입", memberId);
+        return CommonResponse.res(HttpStatus.CREATED, "회원가입", memberId);
     }
 
     @GetMapping("/{id}")
@@ -38,7 +37,10 @@ public class MemberController {
     }
 
     @PutMapping
-    public CommonResponse<MemberResponse> updateMember(@Login LoginMember loginMember, @RequestBody UpdateMemberRequest updateMemberRequest) {
+    public CommonResponse<MemberResponse> updateMember(
+            @RequestBody UpdateMemberRequest updateMemberRequest,
+            @Login LoginMember loginMember
+            ) {
         MemberResponse memberResponse = memberService.updateMember(loginMember.getId(), updateMemberRequest);
         return CommonResponse.res(HttpStatus.OK, "회원 수정", memberResponse);
     }
