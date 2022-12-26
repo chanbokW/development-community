@@ -37,9 +37,14 @@ public enum ErrorCode {
 
     // article
     NOT_FOUND_ARTICLE(404, HttpStatus.NOT_FOUND, "존재하지 않은 게시물"),
-    UNAUTHORIZED_ARTICLE_MEMBER(401, HttpStatus.UNAUTHORIZED, ""),
+    UNAUTHORIZED_ARTICLE_MEMBER(401, HttpStatus.UNAUTHORIZED, "현재 게시물 접근 권한 없음"),
     INVALID_ARTICLE_TITLE(400, HttpStatus.BAD_REQUEST, "제목은 2자이상 50자이하 문자를 입력하세요."),
     INVALID_ARTICLE_CONTENT(400, HttpStatus.BAD_REQUEST, "본문은 2자이상 500자이하 문자를 입력하세요."),
+
+    // comment
+    UNAUTHORIZED_COMMENT_MEMBER(401, HttpStatus.UNAUTHORIZED, "현재 댓글 접근 권한 없음"),
+    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "존재하지 않은 댓글"),
+
 
     // tag
     DUPLICATE_TAG(400,HttpStatus.BAD_REQUEST, "중복되는 태그 입력"),
