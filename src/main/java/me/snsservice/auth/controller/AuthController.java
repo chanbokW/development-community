@@ -32,8 +32,4 @@ public class AuthController {
         return CommonResponse.res(HttpStatus.OK, "accssToken 재발급", authService.reissue(accessTokenRequest.getRefreshToken()));
     }
 
-    @PostMapping("/logout")
-    public void logout() {
-        /** @TODO logout */
-    }
 }

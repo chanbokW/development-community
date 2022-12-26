@@ -34,14 +34,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponse findOneMember(String email) {
-        Member findMember = getMemberByEmail(email);
+    public MemberResponse findOneMember(Long id) {
+        Member findMember = findById(id);
         return MemberResponse.of(findMember);
     }
 
     @Transactional
-    public MemberResponse updateMember(String email, UpdateMemberRequest updateMemberRequest) {
-        Member findMember = getMemberByEmail(email);
+    public MemberResponse updateMember(Long id, UpdateMemberRequest updateMemberRequest) {
+        Member findMember = findById(id);
         String nickname = updateMemberRequest.getNickname();
         String password = updateMemberRequest.getPassword();
         if (!findMember.getNickname().equals(nickname)) {
@@ -52,8 +52,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(String email) {
-        Member findMember = getMemberByEmail(email);
+    public void deleteMember(Long id) {
+        Member findMember = findById(id);
+        // TODO softDelete
         memberRepository.delete(findMember);
     }
 

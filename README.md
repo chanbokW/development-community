@@ -1,26 +1,138 @@
-## 프로젝트 목적
-처음에는 개발지식 공유 sns 서비스를 구현하자는 목적이였나 
-지금까지 단순 이론만 공부한 내용들을 직접 활용해 보고
-그때 그때 학습한 새로운 기술이나 테크닉을 녹여 진행하는 프로젝트입니다.
-- 유용한 기능을 개발하는것보다 새롭게 알게된 기술들로 재구현 초점
-- 기획력이나 설계능력을 기르는 것보다 지금까지 배운기술을 정리하는데 집중
+# 프로젝트
+
+# 목표
+처음에는 개발지식 공유 SNS서비스를 구현하자는 목적이였으나 지금까지 단순 이론만 공부한 내용을 직접 활용해보고 그때 그때 학습한 새롭게 알게된 기술이나 테크닉을 녹여 진행하는 프로젝트입니다. <br>
+* 유용한 기능을 개발하는 것보다 새롭게 알게된 기술들로 재구현 초점을 두었습니다.
+* 기획력이나 설계능력을 기르는 것보다 지금까지 배운기술을 정리하는데 집중
+* Git branch 전략 사용
+* 프로젝트 진행사항 Github Issue 관리
+## 목차
+* ###  [요구 사항](#요구-사항)
+* ### [사용했던 기술스택](#기술-스택)
+* ### [프로젝트하면서 있었던 Issue와 고민점](#프로젝트하면서-있었던-issue와-고민점)
+* ### [개선 할 점 or 배운점](#개선-할-점-or-배운점)
+* ### [erd](#erd-1)
+* ### [api명세](#api-명세)
+
+# 요구 사항
+
+## 주요 도메인
+1. 회원 : 게시물 조회 및 등록, 수정, 삭제를 할 수 있는 회원
+2. 게시물 : 게시물과 게시물의 정보를 등록하고 관리
+## 1. 회원 관리
+* 회원가입
+
+  ➡️ 이메일을 ID로 사용합니다.
+
+* 회원 로그인 및 인증
+
+  ➡️ JTW 토큰을 발급받으며, 이를 추후 사용자 인증으로 사용합니다.
+
+* 로그아웃은 프론트엔드에서 처리.
+
+## 2. 게시물 관리
+* 게시물 생성
+
+  ➡️ 제목, 내용, 해시태그 등을 입력하여 생성합니다. <br>
+  ➡️ 제목, 내용, 해시태그는 필수 입력사항이며, 작성자 정보는 request body에 존재하지 않고, 해당 API 를 요청한 인증정보에서 추출하여 등록 합니다. <br>
+  ➡️ 해시태그는 1개이상 10개 이하로 입력받을 수 있으며 리스트 형태로 데이터를 받는다. <br>
 
 
-## 기술 스택
-<p dir="auto"><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/6cfe4fd1c1ac1558a4d0b6e568698e9d4b504b9e2965524a1477329b3a694592/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4a4156412031312d3030373339363f7374796c653d666f722d7468652d6261646765266c6f676f3d4a617661266c6f676f436f6c6f723d7768697465"><img src="https://camo.githubusercontent.com/6cfe4fd1c1ac1558a4d0b6e568698e9d4b504b9e2965524a1477329b3a694592/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4a4156412031312d3030373339363f7374796c653d666f722d7468652d6261646765266c6f676f3d4a617661266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/JAVA 11-007396?style=for-the-badge&amp;logo=Java&amp;logoColor=white" style="max-width: 100%;"></a>
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/78899826193229f92c7b89740dd215da047eceebac8fe96190b08e72ef2b3391/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e6720426f6f742d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e67266c6f676f436f6c6f723d7768697465"><img src="https://camo.githubusercontent.com/78899826193229f92c7b89740dd215da047eceebac8fe96190b08e72ef2b3391/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e6720426f6f742d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e67266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&amp;logo=Spring&amp;logoColor=white" style="max-width: 100%;"></a>
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/7423032ac861b754d0b8e79affdb741dc61ad45299643f887952e3d8d85bc806/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672044617461204a50412d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f436f6c6f723d7768697465"><img src="https://camo.githubusercontent.com/7423032ac861b754d0b8e79affdb741dc61ad45299643f887952e3d8d85bc806/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672044617461204a50412d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=for-the-badge&amp;logoColor=white" style="max-width: 100%;"></a>
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/655b6af93db1fbe85aa14df34c36a1f8028860f091c3fbfb6a87adf62de8cc35/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5265737420446f63732d3644423333463f7374796c653d666f722d7468652d6261646765"><img src="https://camo.githubusercontent.com/655b6af93db1fbe85aa14df34c36a1f8028860f091c3fbfb6a87adf62de8cc35/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5265737420446f63732d3644423333463f7374796c653d666f722d7468652d6261646765" data-canonical-src="https://img.shields.io/badge/Rest Docs-6DB33F?style=for-the-badge" style="max-width: 100%;"></a>
+* 게시물 수정
 
-[//]: # (<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4e6b25950396e9a3709b56fe4f2b7c8a5ffedde00dd4c40e61d3c9f6488a7a71/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672053656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e675365637572697479266c6f676f436f6c6f723d7768697465"><img src="https://camo.githubusercontent.com/4e6b25950396e9a3709b56fe4f2b7c8a5ffedde00dd4c40e61d3c9f6488a7a71/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672053656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e675365637572697479266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&amp;logo=SpringSecurity&amp;logoColor=white" style="max-width: 100%;"></a>)
+  ➡️ 작성자만 수정 할 수 있습니다.
 
+* 게시물 목록
 
-## 🤔 Contribution
+  ➡️ 모든 사용자는 모든 게시물에 보기권한이 있습니다.<br>
+  ➡️ 게시글 목록에는 제목, 작성자, 작성일, 좋아요 수, 조회수 가 포함됩니다.<br>
+  - **아래 기능은 쿼리 파라미터로 구현. ex) ?search=..&orderBy=..**  (예시이며 해당 변수는 직접 설정)
+  - 아래 4가지 동작은 각각 동작 할 뿐만 아니라, 동시에 적용될 수 있어야 합니다.
 
-## Spring Boot(API SERVER)
-    API SERVER 개발
+  ➡️ Searching (= 검색)
+
+  사용자는 입력한 키워드로 해당 키워드를 포함한 게시물을 조회할 수 있습니다.<br>
+  **Like 검색, 해당 키워드가 문자열 중 포함 된 데이터 검색** <br>
+  검색 방법 1.  some-url?search=후기 >>  “후기" 가 제목에 포함된 게시글 목록.<br>
+  [ex. 후기 검색 시 > 00 방문후기 입니다. (검색 됨)]
+
+  ➡️ Pagination (= 페이지 기능)
+
+  사용자는 1 페이지 당 게시글 수를 조정할 수 있습니다. (default: 10건)
+
+* 게시물 상세보기
+
+  ➡️ 모든 사용자는 모든 게시물에 보기권한이 있습니다.<br>
+  ➡️ 작성자를 포함한 사용자는 본 게시글에 좋아요를 누를 수 있습니다.
+  좋아요된 게시물에 다시 좋아요를 누르면 취소됩니다. <br>
+  ➡️ 작성자 포함한 사용자가 게시글을 상세보기 하면 조회수가 1 증가합니다. (횟수 제한 없음)
+
+* 게시물 삭제
+
+  ➡️ 작성자만 삭제 할 수 잇습니다.<br>
+  ➡️ 작성자는 삭제된 게시물을 다시 복구 할 수 있습니다
+
+- 본 요구사항에 명시 되지 않은 내용은 자유롭게 진행하였습니다.
+
+# 기술 스택
+
+#### Spring Boot
+
+* Spring Web
+* Spring Data JPA
+* Spring Security
+* JUnit5
+* Lombok
+* H2 Database
+* MySQL Driver
+#### etc
+* QueryDsl
+* Docker
+
+# 프로젝트하면서 있었던 Issue와 고민점
+* JPA N + 1
+* JPA 페이징과 N + 1 문제
+  * 문제
+    * 게시물(Article Entity)에서 다수의 OneToMany관계 존재
+    * OneToMany 관계의 Entity가 필요할 경우 fetch join을 사용
+    * 게시물 조회시 페이징네이션 상황이 필요
+    * 쿼리에서 limit이 생략되는 문제가 발생
+
+  * 원인
+    * OneToMany관계에서 fetch Join과 페이징네이션을 함 계 사용할 경우 어플리케이션에서 limit을 수행 함 만약 데이터가 많을 경우 oom(OutOfMemoryError)가 발생
+
+  * 해결
+    * fetchjoin을 제거 후 article기준 아이디로 중복을 제거 후 in 쿼리로 유도하였습니다.
+    * 두 개의 쿼리로 N+1 문제 해결
+
+* 테스트 코드
+* 해시태그 다중 조회 쿼리 개선
+  * 문제, 원인
+    * 게시물 생성 시 태그 조회 쿼리 다수 발생
+  * 해결
+    * 하나 씩 조회쿼리에서 in절로 조회된 태그와 생성 할 태그 비교 후 없는 태그 생성하도록 변경하였습니다.
+
+* 클라이언트에서 넘어온 요청 데이터는 controller에서 모두 검증하는게 맞을까?
+# 개선 할 점 or 배운점
+* ### 개선 할 점
+  * rest API 문서화
+    * Spring Rest Docs 적용
+  * CI/CD를 적용하여 배포자동화
+  * 일정 수준이상 테스트커버리지 유지하기
+* ### 배운점
+  * 코드에 대한 유지보수 및 안정감을 높이기 위해 테스트코드를
+    작성했습니다. 그러인해 그전 프로젝트에 오류를 찾는 비율이 테스트코드 작성 후 현저히 낮아지고 개발 생상선이 증가한 경험을 하였습니다.
+  *
+## ERD
+* [ERD](https://www.erdcloud.com/d/sqgFoRnp3xtw2jCbi)
+#### 데이터베이스 테이블 설계시 고려사항
+* 데이터 무결성
+* 적절한 연관관계
+* 객체지향 vs 데이터 중심
+
+## 프로젝트 구조
 패키지 구조는 도메인 단위로 디렉토리를 다음과 같이 구성하였습니다.
-- 도메인(게시물)
+- 도메인(게시물, 회원 등)
   - controller
     - API 관리한다.
   - service
@@ -37,64 +149,265 @@
 - config
   - 프로젝트의 Configuration 관리한다.
 
-## Spring Security
-    Security 설정을 추가해 인가된 사용자만 특정 API를 접근 할 수 있도록 제한한다
-구조는 다음과 같이 구성하였습니다.
-- Session Creation Policy : STATELESS
-- CSRF : disable
-- FormLogin : disable
-- httpBasic : disable
-- AuthenticationEntryPoint : JwtAuthenticationEntryPoint.class
-- AccessDeniedHandler : JwtAccessDeniedHandler.class
 
-## JPA / QueryDSL
-    객체 중심 도메인 설계 및 반복적인 CRUD작업을 대체 및 비즈니스로직 집중한다.
-- JPA : 반복적인 CRUD 작업을 대체해 간단히 DataBase 데이터를 조회한다.
-- QueryDSL : Join 등 JPA에서 발생한 N + 1 문제 등 SQL은 QueryDSL로 작성한다.
-  - ArticleRepository(JPA Interface)
-  - ArticleCustomRepository(QueryDSL Interface)
-  - ArticleCustomRepository(QueryDSL Implements Class)
-
-- QueryDSL로 작성한 SQL문은 JunitTest 후 작성하였습니다.
-```java
-@DataJpaTest
-public class ArticleRepositoryTest {
-    ...
-}
-```
-
-## JUnit
-    레이어 별로 테스트를 진행하였고 로직에 집중해 테스트를 수행한다.
-- domain Test
-  - 비즈니스 로직에서 중요한 부분이기 때문에 테스트코드를 작성하였습니다.
-    ```java
-    public class TagsTest {
-        ...
+# API 명세
+### 1. 회원관리
+* POST `/api/v1/auth/login'
+  request
+    ```json
+    {
+        "email":"cksqhr4961@naver.com",
+        "password":"book1234!"
     }
     ```
-- Service Test
-  - 스프링부트 테스트로 작성하였습니다. 
-    ```java
-      @SpringBootTest
-      @Transactional
-      public class ArticleServiceTest {
-            ...  
-      }
-    ```
-- Repository Test
-  - 주로 커스텀하게 작성한 쿼리 메소드나 QueryDSL로 작성한 SQL을 테스트 및 실제 쿼리가 어떻게 출력되는 지 확인하였습니다.
-  ```java
-    @DataJpaTest
-    public class ArticleRepositoryTest {
-    ...
+  response
+    ```json
+        {
+    "status": "OK",
+    "message": "로그인 후 토큰 발급",
+    "data": {
+        "accessToken":      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJja3NxaHI0OTYxQG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX01FTUJFUiIsIm1lbWJlcklkIjoxLCJpYXQiOjE2NzE5NjI3MTksImV4cCI6MTY3MTk2NjMxOX0.z4YlIvnV0vzc9E8Qz8CzQAuAQesdyoS7K4vEYcni_vtQZZ5k09B_hapBGPLVR9ozmbZqV10HAhslkR2UjN-XGA",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJja3NxaHI0OTYxQG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX01FTUJFUiIsIm1lbWJlcklkIjoxLCJpYXQiOjE2NzE5NjI3MTksImV4cCI6MTY3MjU2NzUxOX0.T8jAl6OmSeXxt4kCDcShnIloznxcQXOPwFpWaYmEM8fyuufe7tMro0LeqXulfPkImubDr5S52DdTUyY3zRuVIg"
+        }
     }
     ```
-- controller
-  - 진행 중
+* POST `/api/v1/members/signup` <br>
+  request
+    ```json
+    {
+        "email":"test1234@test.com",
+        "password":"test1234!@",
+        "nickname":"Java"
+    }
+    ```
+  response
+    ```json
+    {
+        "status": "CREATED",
+        "message": "회원생성 API입니다.",
+        "data": 1
+    }
+    ```
 
-## DB 설계 및 Entity 설계 
-![스크린샷](https://user-images.githubusercontent.com/82792464/198165515-f8651588-fb2d-499f-a632-dca6908ee4d7.png)
+* GET `/api/v1/members/{id}`<br>
+  response
+    ```json
+    {
+    "status": "OK",
+    "message": "회원 조회",
+    "data": {
+        "id": 1,
+        "email": "cksqhr4961@naver.com",
+        "nickname": "hello6",
+        "role": "ROLE_MEMBER",
+        "createAt": "2022-12-19 19:05:24"
+        }
+    }
+    
+    ```
+* PUT `/api/v1/memebers` <br>
+  request
+    ```json
+    Authorization: Bearer {{jwtToken}}
+    {
+        "password": "test1236!",
+        "nickname": "hello"
+    }
+    ```
+  response
+    ```json
+    {
+        "status": "OK",
+        "message": "회원 수정"
+        "data": {
+            "id": 1,
+            "email": "test1234@test.com",
+            "nickname": "hello",
+            "role": "ROLE_MEMBER"
+        }
+    }
+    ```
+* *DELETE* `/api/v1/members` <br>
+  request
+    ```
+     Authorization: Bearer {{jwtToken}}
+    ```
+  response
+    ```json
+    {
+    "status": "OK",
+    "message": "회원 탈퇴"
+    }
+    ```
 
-진행중인 사항
-- 테스트코드 작성 진행중
+### 2. 게시물 관리
 
+* POST `/api/v1/articles` <br>
+  request
+    ```json
+     Authorization: Bearer {{jwtToken}}
+    {
+        "title":"안녕하세요",
+        "content":"핑크베놈핑크베놈핑크베놈핑크베놈",
+        "tags": [
+                "hel123lo","kor123eaduo"
+        ]
+    }
+    ```
+  response
+    ```json
+    {
+        "status": "CREATED",
+        "message": "게시물 생성",
+        "data": 22
+    }
+    ```
+* GET `/api/v1/articles/{id}` <br>
+    ```json
+    {
+        "id": 1,
+        "title": "안녕하세요",
+        "content": "핑크베놈핑크베놈핑크베놈핑크베놈",
+        "view": 2,
+        "nickname": "hello",
+        "likeCount": 0,
+        "tags": [
+            "hello",
+            "koreaduo"
+        ]
+    }
+    ```
+* GET `/api/v1/articles/` <br>
+    ```json
+    GET /api/v1/articles?keyword=안녕&optionType=title_content&size=10
+   {
+        "status": "OK",
+        "message": "게시물 전체 및 검색 조회",
+        "data": [
+            {
+                "articleId": 20,
+                "title": "안녕하세요",
+                "content": "codkasdfo",
+                "viewCount": 0,
+                "memberResponse": {
+                     "id": 1,
+                    "email": "cksqhr4961@naver.com",
+                    "nickname": "hello6",
+                    "role": "ROLE_MEMBER",
+                    "createAt": "2022-12-19 19:05:24"
+                },
+                "createAt": "2022-12-20 11:09:48"
+            },
+            {
+                "articleId": 19,
+                "title": "안녕하세요19",
+                "content": "JAVAJAVAJAVAJAVAJAVAJAVAJAVAJAVAJAVAJAVA",
+                "viewCount": 0,
+                "memberResponse": {
+                     "id": 1,
+                    "email": "cksqhr4961@naver.com",
+                    "nickname": "hello6",
+                    "role": "ROLE_MEMBER",
+                    "createAt": "2022-12-19 19:05:24"
+                },
+                "createAt": "2022-12-20 11:09:11"
+            },
+            ... data
+         ]
+    }
+    ```
+* PUT `/api/v1/articles/{articleId}` <br>
+  request
+    ```
+    Authorization: Bearer {{jwtToken}}
+    ```
+  response
+    ```json
+    {
+        "status": "NO_CONTENT",
+        "message": "게시물 수정"
+    }
+    ```
+* DELETE `/api/v1/articles/{articleId}` <br>
+  request
+    ```
+    Authorization: Bearer {{jwtToken}}
+    ```
+  response
+    ```json
+    {
+        "status": "NO_CONTENT",
+        "message": "게시물 삭제"
+    }
+    ```
+
+### 3. 좋아요
+
+* POST `/api/v1/articles/{articleId}/like<br>
+  request
+    ```
+    Authorization: Bearer {{jwtToken}}
+    ```
+    ```json
+    {
+        "status": "OK",
+        "message": "좋아요",
+        "data": true
+    }
+    or
+    
+    {
+        "status": "OK",
+        "message": "좋아요 취소",
+        "data": false
+    }
+    ```
+
+### 4. 댓글관리
+* POST `/api/v1/comments` <br>
+  request
+    ```json
+     Authorization: Bearer {{jwtToken}}
+    ```
+  response
+    ```json
+    {
+        "status": "CREATED",
+        "message": "댓글 생성",
+        "data": 1
+    }
+    ```
+* GET `/api/v1/comments/{articleId}` <br>
+  response
+    ```json
+    {
+        "status": "OK",
+        "message": "게시물 댓글 조회",
+        "data": 1
+    }
+    ```
+* PATCH `/api/v1/comments/{commentId}` <br>
+  request
+    ```
+    Authorization: Bearer {{jwtToken}}
+    ```
+
+  response
+    ```json
+    {
+        "status": "OK",
+        "message": "댓글 수정"
+    }
+    ```
+* DELETE `/api/v1/comments/{commentId}` <br>
+  request
+    ```
+    Authorization: Bearer {{jwtToken}}
+    ```
+  response
+    ```json
+    {
+        "status": "NO_CONTENT",
+        "message": "댓글 삭제"
+    }
+    ```    
