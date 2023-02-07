@@ -91,7 +91,6 @@
 * Docker
 
 # 3. 프로젝트하면서 있었던 Issue와 고민점
-* JPA N + 1
 * JPA 페이징과 N + 1 문제
   * 문제
     * 게시물(Article Entity)에서 다수의 OneToMany관계 존재
@@ -103,10 +102,8 @@
     * OneToMany관계에서 fetch Join과 페이징네이션을 함 계 사용할 경우 어플리케이션에서 limit을 수행 함 만약 데이터가 많을 경우 oom(OutOfMemoryError)가 발생
 
   * 해결
-    * fetchjoin을 제거 후 article기준 아이디로 중복을 제거 후 in 쿼리로 유도하였습니다.
+    * hibernate.default_batch_fetch_size설정을 통해 in 쿼리로 리펙토링 및 성능 향상  
     * 두 개의 쿼리로 N+1 문제 해결
-
-* 테스트 코드
 * 해시태그 다중 조회 쿼리 개선
   * 문제, 원인
     * 게시물 생성 시 태그 조회 쿼리 다수 발생
